@@ -22,12 +22,23 @@ Dialog DLL:      TCM.DLL V1.56.4.0
  
 <h2>Project:</h2>
 C:\Users\littl\Documents\GitHub\FritzRobot_chassis\MDK-ARM\chassis.uvprojx
-Project File Date:  09/12/2023
+Project File Date:  09/16/2023
 
 <h2>Output:</h2>
 *** Using Compiler 'V6.19', folder: 'C:\Keil_v5\ARM\ARMCLANG\Bin'
 Build target 'chassis'
-".\chassis\chassis.axf" - 0 Error(s), 0 Warning(s).
+../USB_DEVICE/App/usbd_cdc_if.c(269): warning: illegal character encoding in string literal [-Winvalid-source-encoding]
+                USBVcom_printf("<CA>յ<BD><CB>ٶ<C8>Ϊ%s\n",Buf);//<D5><E2><C0><EF><D3><C3><D7>ַ<FB><B4><AE><B5>Ļ<B0><A3><AC><C8><E7><B9><FB><D7>ַ<FB><B4><AE><B3><A4><B6>̲<BB>һ<A3><AC><D4><F2><C8><E7><B9><FB>buf<C7><F8><B2><A2><B2><BB><BB><E1><C7><E5><BF>գ<AC><B6><F8><CA>ǻᱣ<C1><F4>
+                                ^~~~ ~~~~~~~~ ~~~~
+../USB_DEVICE/App/usbd_cdc_if.c(349): warning: 'vsnprintf' size argument is too large; destination buffer has size 64, but size argument is 65 [-Wfortify-source]
+        len = vsnprintf((char*)usbtemp,sizeof(usbtemp)+1,(char*)format,args);
+              ^
+2 warnings generated.
+compiling usbd_cdc_if.c...
+linking...
+Program Size: Code=28420 RO-data=1036 RW-data=248 ZI-data=9032  
+FromELF: creating hex file...
+".\chassis\chassis.axf" - 0 Error(s), 2 Warning(s).
 
 <h2>Software Packages used:</h2>
 

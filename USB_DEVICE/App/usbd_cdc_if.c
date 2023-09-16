@@ -24,6 +24,7 @@
 /* USER CODE BEGIN INCLUDE */
 #include <stdarg.h>
 #include <stdio.h>
+#include <string.h>
 /* USER CODE END INCLUDE */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -259,12 +260,22 @@ static int8_t CDC_Control_FS(uint8_t cmd, uint8_t* pbuf, uint16_t length)
   * @param  Len: Number of data received (in bytes)
   * @retval Result of the operation: USBD_OK if all operations are OK else USBD_FAIL
   */
-static int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)
+static int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)//此函数是usb接收函数，是自动进入中断的
 {
   /* USER CODE BEGIN 6 */
-  USBD_CDC_SetRxBuffer(&hUsbDeviceFS, &Buf[0]);
+	
+	if (Buf[0]==0x76)//Buf是一个
+	{
+		USBVcom_printf("收到速度为%s\n",*Buf);//Buf是指向UserRxBufferFS的，
+	}
+	memset(UserRxBufferFS,0,sizeof(UserRxBufferFS));//清空缓存区，因为缓存区是从前往后覆盖的，如果上一次输出字符串比较长的话，那么这一次输出时会把没覆盖掉的上一次的内容打出来
+	//CDC_Transmit_FS(Buf, *Len);
+	USBD_CDC_SetRxBuffer(&hUsbDeviceFS, &Buf[0]);
   USBD_CDC_ReceivePacket(&hUsbDeviceFS);
-	USBVcom_printf("收到数据\n");//收到后无论什么数据都向usb发送收到数据
+	
+	//printf(Buf);
+	
+	//USBVcom_printf("收到数据可是太牛逼了啊 \n");//收到后无论什么数据都向usb发送收到数据
   return (USBD_OK);
   /* USER CODE END 6 */
 }
@@ -280,9 +291,10 @@ static int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)
   * @param  Len: Number of data to be sent (in bytes)
   * @retval USBD_OK if all operations are OK else USBD_FAIL or USBD_BUSY
   */
-uint8_t CDC_Transmit_FS(uint8_t* Buf, uint16_t Len)
+uint8_t CDC_Transmit_FS(uint8_t* Buf, uint16_t Len)//usb发送函数
 {
   uint8_t result = USBD_OK;
+	uint32_t Timeout = HAL_GetTick();
   /* USER CODE BEGIN 7 */
   USBD_CDC_HandleTypeDef *hcdc = (USBD_CDC_HandleTypeDef*)hUsbDeviceFS.pClassData;
   if (hcdc->TxState != 0){
@@ -290,6 +302,15 @@ uint8_t CDC_Transmit_FS(uint8_t* Buf, uint16_t Len)
   }
   USBD_CDC_SetTxBuffer(&hUsbDeviceFS, Buf, Len);
   result = USBD_CDC_TransmitPacket(&hUsbDeviceFS);
+	/*
+	while(hcdc->TxState)//这句话是要等待发送完成，否则如果连续两句出现CDC_Transmit_FS他可能就不发送了,所以最好只发送一次
+	{
+		if(HAL_GetTick() - Timeout >=10)//超时//于此同时也别让它一直发送，还是要有个timeout
+		{
+			break;
+		}
+	}
+	*/
   /* USER CODE END 7 */
   return result;
 }
@@ -319,7 +340,7 @@ static int8_t CDC_TransmitCplt_FS(uint8_t *Buf, uint32_t *Len, uint8_t epnum)
 
 /* USER CODE BEGIN PRIVATE_FUNCTIONS_IMPLEMENTATION */
 
-void USBVcom_printf(const char *format,...)
+void USBVcom_printf(const char *format,...)//我感觉这个函数有问题，好像连续两次输出就会丢字符
 {
 	unsigned char usbtemp[64];
 	unsigned short len;

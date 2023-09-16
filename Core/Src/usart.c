@@ -115,7 +115,8 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
 }
 
 /* USER CODE BEGIN 1 */
-int fputc(int ch, FILE *f)
+/*
+int fputc(int ch, FILE *f)//重写print函数使其输出串口
 {
   HAL_UART_Transmit(&huart6, (uint8_t *)&ch, 1, 0xffff);
   return ch;
@@ -126,5 +127,11 @@ int fgetc(FILE *f)
   uint8_t ch = 0;
   HAL_UART_Receive(&huart6, &ch, 1, 0xffff);
   return ch;
+}
+*/
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)//串口接收中断回调函数
+{
+	return;
 }
 /* USER CODE END 1 */
