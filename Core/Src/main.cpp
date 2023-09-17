@@ -117,7 +117,6 @@ int main(void)
 		TIMcnt = GetTimEncoder();//捕获TIM4脉冲数据
 		//uint8_t data[]="来了 \n";
 		//CDC_Transmit_FS(data,sizeof(data));//直接调用usb的函数输出
-		//printf("TIM2定时器编码器模式捕获脉冲 = %d \n",TIMcnt);//把脉冲数据打印出来
 		USBVcom_printf("TIM2定时器编码器模式捕获脉冲 = %d \n",TIMcnt);//调用重定向后的usb打印函数
 		HAL_GPIO_TogglePin(GPIOF,GPIO_PIN_14);
     /* USER CODE END WHILE */

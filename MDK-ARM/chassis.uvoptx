@@ -152,25 +152,25 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>269</LineNumber>
+          <LineNumber>274</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134223302</Address>
+          <Address>0</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
+          <BreakIfRCount>0</BreakIfRCount>
           <Filename>../USB_DEVICE/App/usbd_cdc_if.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\chassis\../USB_DEVICE/App/usbd_cdc_if.c\269</Expression>
+          <Expression></Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
         <Ww>
           <count>0</count>
           <WinNumber>1</WinNumber>
-          <ItemText>UserRxBufferFS</ItemText>
+          <ItemText>Len</ItemText>
         </Ww>
       </WatchWindow1>
       <Tracepoint>
