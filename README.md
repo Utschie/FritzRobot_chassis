@@ -1,6 +1,7 @@
 # FritzRobot_chassis
 ## 2023-09-19 update
-### PI control motor，Ki and Kp are still not tuned.
+### PI control motor，Ki=3.0 and Kp=45. The control result shows like，
+![avatar](./pictures/encoder_control_result.png)
 ## 2023-09-17 update
 ### receive formatted char from VCP and save the speed control value in float.
 ## 2023-09-12 update
