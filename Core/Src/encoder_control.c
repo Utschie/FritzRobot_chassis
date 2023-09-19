@@ -5,6 +5,8 @@ int nErrorPrev;//上一次偏差值
 int nPwmBais,nPwm;//PWM增量，PWM总量
 int nEncoderTarget=0;
 int nEncoderPulse;
+float fKp = 45.0;
+float fKi = 3.0;//比例参数和积分参数
 int GetEncoderPulse(void)//获取TIM2定时器读出来的编码器脉冲
 {
 		int nPulse;//存放从TIM4定时器读出来的编码器脉冲
@@ -16,12 +18,10 @@ int GetEncoderPulse(void)//获取TIM2定时器读出来的编码器脉冲
 void SpeedInnerControl(int nPulse,int nTarget)//速度内环控制
 {
     int nError;//偏差
-		//float OutData[3];
-    float fP = 10.0, fI = 0.9;//这里只用到PI，参数由电机的种类和负载决定
-
+		
     nError = nTarget-nPulse;//偏差 = 目标速度 - 实际速度，这里的nTarget应该跟pulse的量纲是一样的，也就是target就是目标pulse
 
-    nPwmBais = fP * (nError - nErrorPrev) + fI * nError;//增量式PI控制器
+    nPwmBais = fKp * (nError - nErrorPrev) + fKi * nError;//增量式PI控制器
 
     nErrorPrev = nError;//保存上一次偏差
 
@@ -49,3 +49,4 @@ void SetMotorVoltageAndDirection(int nMotorPwm)//设置电机电压和方向
             __HAL_TIM_SET_COMPARE(&htim9, TIM_CHANNEL_1, nMotorPwm);
         }
 }
+

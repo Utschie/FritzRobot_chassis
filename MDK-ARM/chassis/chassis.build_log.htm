@@ -22,16 +22,20 @@ Dialog DLL:      TCM.DLL V1.56.4.0
  
 <h2>Project:</h2>
 C:\Users\littl\Documents\GitHub\FritzRobot_chassis\MDK-ARM\chassis.uvprojx
-Project File Date:  09/18/2023
+Project File Date:  09/19/2023
 
 <h2>Output:</h2>
 *** Using Compiler 'V6.19', folder: 'C:\Keil_v5\ARM\ARMCLANG\Bin'
 Build target 'chassis'
-compiling stm32f4xx_it.c...
+../Core/Src/main.cpp(112): warning: illegal character encoding in string literal [-Winvalid-source-encoding]
+                USBVcom_printf("<B1><E0><C2><EB><C6><F7>ģʽ<B2><B6><BB><F1><CB>ٶ<C8> = %d , Ŀ<B1><EA><CB>ٶ<C8>= %d\n",nEncoderPulse,nEncoderTarget);//<CF><F2><C6><C1>Ļ<CA><E4><B3><F6><B5><B1>ǰ<CB>ٶȺ<CD>Ŀ<B1><EA><CB>ٶ<C8>
+                                ^~~~~~~~~~~~~~~~~~~~~~~~  ~~~~~~~~~~~~~~~~~~~~ ~~~~         ~~~~~~~~~~~~ ~~~~
+1 warning generated.
+compiling main.cpp...
 linking...
-Program Size: Code=30168 RO-data=1036 RW-data=248 ZI-data=9128  
+Program Size: Code=35508 RO-data=1052 RW-data=256 ZI-data=9120  
 FromELF: creating hex file...
-".\chassis\chassis.axf" - 0 Error(s), 0 Warning(s).
+".\chassis\chassis.axf" - 0 Error(s), 1 Warning(s).
 
 <h2>Software Packages used:</h2>
 

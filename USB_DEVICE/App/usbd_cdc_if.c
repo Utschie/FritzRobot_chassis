@@ -36,6 +36,7 @@
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
 extern int nEncoderTarget;
+extern float fKp,fKi;
 /* USER CODE END PV */
 
 /** @addtogroup STM32_USB_OTG_DEVICE_LIBRARY
@@ -265,17 +266,7 @@ static int8_t CDC_Control_FS(uint8_t cmd, uint8_t* pbuf, uint16_t length)
 static int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)
 {
   /* USER CODE BEGIN 6 */
-	
-	if (Buf[0]==0x76)//BufÊÇÖ¸ÏòUserRxBufferFSµÄ£¬Ò²¿ÉÒÔÓÃUserRxBufferFSÌæ´ú¡£0x76ÊÇvµÄÒâË¼
-	{
-		char ch_speed[64];//ÓÃÀ´¸´ÖÆ×Ö·û´®,²¢ÇÒ±£Ö¤½áÊø·û¿ÉÒÔ±»¸´ÖÆ
-		int speed;
-		strncpy(ch_speed,Buf+3,strlen(Buf+3)+1);//´ÓµÚÈıÎ»¿ªÊ¼¶ÁÈ¡Êı×ÖÒ»Ö±¶Áµ½Ä©Î²
-		speed = atoi(ch_speed);//°Ñ×Ö·û´®ch_speed×ª³ÉÕûĞÍÊı¸³¸øspeed
-		nEncoderTarget=speed;//¸ü¸ÄencoderµÄTarget
-		USBVcom_printf("ÊÕµ½Ä¿±êËÙ¶ÈÎª%d\n",speed);
-		
-	}
+	USBVcomParser(Buf);
 	memset(UserRxBufferFS,0,sizeof(UserRxBufferFS));//Çå¿Õ»º´æÇø£¬ÒòÎªUserRxBufferFS×÷Îª»º´æÇøÊÇ´ÓÇ°Íùºó¸²¸ÇµÄ£¬Èç¹ûÉÏÒ»´ÎÊä³ö×Ö·û´®±È½Ï³¤µÄ»°£¬ÄÇÃ´ÕâÒ»´ÎÊä³öÊ±»á°ÑÃ»¸²¸ÇµôµÄÉÏÒ»´ÎµÄÄÚÈİ´ò³öÀ´¡£0x00ÊÇ×Ö·û´®Ä©Î²µÄÒâË¼
 	USBD_CDC_SetRxBuffer(&hUsbDeviceFS, &Buf[0]);
   USBD_CDC_ReceivePacket(&hUsbDeviceFS);
@@ -356,6 +347,37 @@ void USBVcom_printf(const char *format,...)//ÎÒ¸Ğ¾õÕâ¸öº¯ÊıÓĞÎÊÌâ£¬ºÃÏñÁ¬ĞøÁ½´ÎÊ
 	va_end(args);//Õâ¾ä±ØĞëÓĞÓÃÀ´ÊÍ·ÅÄÚ´æ
 	
 	CDC_Transmit_FS(usbtemp,len);
+}
+
+void USBVcomParser(uint8_t* Buf)
+{
+	
+	if (Buf[0]==0x76)//BufÊÇÖ¸ÏòUserRxBufferFSµÄ£¬Ò²¿ÉÒÔÓÃUserRxBufferFSÌæ´ú¡£0x76ÊÇvµÄÒâË¼,±íÊ¾ËÙ¶È,×¢ÒâvĞèÒªÊ±Ğ¡Ğ´£¬ÒòÎª16½øÖÆ²»ÈÏÊ¶´óĞ´×ÖÄ¸
+	{
+		char ch_speed[64];//ÓÃÀ´¸´ÖÆ×Ö·û´®,²¢ÇÒ±£Ö¤½áÊø·û¿ÉÒÔ±»¸´ÖÆ
+		int speed;
+		strncpy(ch_speed,Buf+3,strlen(Buf+3)+1);//´ÓµÚÈıÎ»¿ªÊ¼¶ÁÈ¡Êı×ÖÒ»Ö±¶Áµ½Ä©Î²
+		speed = atoi(ch_speed);//°Ñ×Ö·û´®ch_speed×ª³ÉÕûĞÍÊı¸³¸øspeed
+		nEncoderTarget=speed;//¸ü¸ÄencoderµÄTarget
+		USBVcom_printf("ÊÕµ½Ä¿±êËÙ¶ÈÎª%d\n",speed);
+	}
+	else if (Buf[0]==0x6b && Buf[1]==0x69)
+	{
+		char ch_ki[64];
+		float ki;
+		strncpy(ch_ki,Buf+4,strlen(Buf+4)+1);//´ÓµÚÈıÎ»¿ªÊ¼¶ÁÈ¡Êı×ÖÒ»Ö±¶Áµ½Ä©Î²
+		ki = atof(ch_ki);
+		fKi=ki;
+		USBVcom_printf("ÊÕµ½»ı·Ö²ÎÊıKiÎª%f\n",ki);}
+	else if (Buf[0]==0x6b && Buf[1]==0x70)
+	{
+		char ch_kp[64];
+		float kp;
+		strncpy(ch_kp,Buf+4,strlen(Buf+4)+1);//´ÓµÚÈıÎ»¿ªÊ¼¶ÁÈ¡Êı×ÖÒ»Ö±¶Áµ½Ä©Î²
+		kp = atof(ch_kp);
+		fKp=kp;
+		USBVcom_printf("ÊÕµ½±ÈÀı²ÎÊıKpÎª%f\n",kp);
+	}
 }
 /* USER CODE END PRIVATE_FUNCTIONS_IMPLEMENTATION */
 
