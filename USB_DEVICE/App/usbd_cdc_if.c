@@ -26,6 +26,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include "encoder_control.h"
 /* USER CODE END INCLUDE */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -34,7 +35,7 @@
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
-
+extern int nEncoderTarget;
 /* USER CODE END PV */
 
 /** @addtogroup STM32_USB_OTG_DEVICE_LIBRARY
@@ -261,23 +262,18 @@ static int8_t CDC_Control_FS(uint8_t cmd, uint8_t* pbuf, uint16_t length)
   * @param  Len: Number of data received (in bytes)
   * @retval Result of the operation: USBD_OK if all operations are OK else USBD_FAIL
   */
-static int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)//此函数是usb接收函数，是自动进入中断的
+static int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)
 {
   /* USER CODE BEGIN 6 */
 	
 	if (Buf[0]==0x76)//Buf是指向UserRxBufferFS的，也可以用UserRxBufferFS替代。0x76是v的意思
 	{
 		char ch_speed[64];//用来复制字符串,并且保证结束符可以被复制
-		float speed;
+		int speed;
 		strncpy(ch_speed,Buf+3,strlen(Buf+3)+1);//从第三位开始读取数字一直读到末尾
-		speed = atof(ch_speed);//把字符串ch_speed转成浮点数赋给speed；
-		
-		
-		
-		
-		
-		USBVcom_printf("收到速度为%f\n",speed);
-		
+		speed = atoi(ch_speed);//把字符串ch_speed转成整型数赋给speed
+		nEncoderTarget=speed;//更改encoder的Target
+		USBVcom_printf("收到目标速度为%d\n",speed);
 		
 	}
 	memset(UserRxBufferFS,0,sizeof(UserRxBufferFS));//清空缓存区，因为UserRxBufferFS作为缓存区是从前往后覆盖的，如果上一次输出字符串比较长的话，那么这一次输出时会把没覆盖掉的上一次的内容打出来。0x00是字符串末尾的意思
@@ -302,7 +298,7 @@ static int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)//此函数是usb接收函数，
   * @param  Len: Number of data to be sent (in bytes)
   * @retval USBD_OK if all operations are OK else USBD_FAIL or USBD_BUSY
   */
-uint8_t CDC_Transmit_FS(uint8_t* Buf, uint16_t Len)//usb发送函数
+uint8_t CDC_Transmit_FS(uint8_t* Buf, uint16_t Len)
 {
   uint8_t result = USBD_OK;
   /* USER CODE BEGIN 7 */

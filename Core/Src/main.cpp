@@ -27,7 +27,7 @@
 /* USER CODE BEGIN Includes */
 #include <stdio.h>
 #include "usbd_cdc_if.h"
-
+#include "encoder_control.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -48,7 +48,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+extern int nEncoderTarget;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -59,6 +59,7 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+
 int TIMcnt;
 
 
@@ -66,9 +67,10 @@ int GetTimEncoder(void)//获取TIM4定时器读出来的编码器脉冲
 {
 		int cnt;//存放从TIM4定时器读出来的编码器脉冲
     cnt = (short)(__HAL_TIM_GET_COUNTER(&htim2));//先读取脉冲数
-    __HAL_TIM_SET_COUNTER(&htim2,0);//再计数器清零
+    //__HAL_TIM_SET_COUNTER(&htim2,0);//
     return cnt;//返回脉冲数
 }
+
 /* USER CODE END 0 */
 
 /**
@@ -103,9 +105,11 @@ int main(void)
   MX_TIM2_Init();
   MX_USB_DEVICE_Init();
 	MX_TIM9_Init();
+	MX_TIM6_Init();
   /* USER CODE BEGIN 2 */
 	HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_ALL);//开启TIM4的编码器接口模式
 	HAL_TIM_PWM_Start(&htim9,TIM_CHANNEL_1);//开始pwm输出
+	HAL_TIM_Base_Start_IT(&htim6);
 	//HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_3);//开始pwm输出
   /* USER CODE END 2 */
 
@@ -114,10 +118,11 @@ int main(void)
   while (1)
   {
 		HAL_Delay(500);
-		TIMcnt = GetTimEncoder();//捕获TIM4脉冲数据
+		TIMcnt = GetTimEncoder();//捕获TIM2脉冲数据
+		USBVcom_printf("编码器模式捕获速度 = %d , 目标速度= %d\n",TIMcnt,nEncoderTarget);//向屏幕输出当前速度和目标速度
 		//uint8_t data[]="来了 \n";
 		//CDC_Transmit_FS(data,sizeof(data));//直接调用usb的函数输出
-		USBVcom_printf("TIM2定时器编码器模式捕获脉冲 = %d \n",TIMcnt);//调用重定向后的usb打印函数
+		//调用重定向后的usb打印函数
 		HAL_GPIO_TogglePin(GPIOF,GPIO_PIN_14);
     /* USER CODE END WHILE */
 

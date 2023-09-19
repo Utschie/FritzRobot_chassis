@@ -44,4 +44,5 @@
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pcd_ex.h \
   ..\Middlewares\ST\STM32_USB_Device_Library\Core\Inc\usbd_core.h \
   ..\Middlewares\ST\STM32_USB_Device_Library\Core\Inc\usbd_ctlreq.h \
-  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdarg.h
+  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdarg.h \
+  ..\Core\Inc\encoder_control.h

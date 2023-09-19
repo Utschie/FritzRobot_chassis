@@ -1,12 +1,12 @@
 --cpu=Cortex-M4.fp.sp
 ".\chassis\startup_stm32f427xx.o"
 ".\chassis\main.o"
+".\chassis\encoder_control.o"
 ".\chassis\gpio.o"
 ".\chassis\tim.o"
 ".\chassis\usart.o"
 ".\chassis\stm32f4xx_it.o"
 ".\chassis\stm32f4xx_hal_msp.o"
-".\chassis\encoder_control.o"
 ".\chassis\stm32f4xx_hal_pcd.o"
 ".\chassis\stm32f4xx_hal_pcd_ex.o"
 ".\chassis\stm32f4xx_ll_usb.o"

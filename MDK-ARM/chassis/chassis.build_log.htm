@@ -22,35 +22,16 @@ Dialog DLL:      TCM.DLL V1.56.4.0
  
 <h2>Project:</h2>
 C:\Users\littl\Documents\GitHub\FritzRobot_chassis\MDK-ARM\chassis.uvprojx
-Project File Date:  09/16/2023
+Project File Date:  09/18/2023
 
 <h2>Output:</h2>
 *** Using Compiler 'V6.19', folder: 'C:\Keil_v5\ARM\ARMCLANG\Bin'
 Build target 'chassis'
-../USB_DEVICE/App/usbd_cdc_if.c(272): warning: passing 'uint8_t *' (aka 'unsigned char *') to parameter of type 'const char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
-                strncpy(ch_speed,Buf+3,strlen(Buf+3)+1);//<B4>ӵ<DA><C8><FD>λ<BF><AA>ʼ<B6><C1>ȡ<CA><FD><D7><D6>һֱ<B6><C1><B5><BD>ĩβ
-                                              ^~~~~
-C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\string.h(335): note: passing argument to parameter here
-extern _ARMABI size_t strlen(const char * /*s*/) __attribute__((__nonnull__(1)));
-                                               ^
-../USB_DEVICE/App/usbd_cdc_if.c(272): warning: passing 'uint8_t *' (aka 'unsigned char *') to parameter of type 'const char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
-                strncpy(ch_speed,Buf+3,strlen(Buf+3)+1);//<B4>ӵ<DA><C8><FD>λ<BF><AA>ʼ<B6><C1>ȡ<CA><FD><D7><D6>һֱ<B6><C1><B5><BD>ĩβ
-                                 ^~~~~
-C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\string.h(84): note: passing argument to parameter here
-extern _ARMABI char *strncpy(char * __restrict /*s1*/, const char * __restrict /*s2*/, size_t /*n*/) __attribute__((__nonnull__(1,2)));
-                                                                                     ^
-../USB_DEVICE/App/usbd_cdc_if.c(274): warning: illegal character encoding in string literal [-Winvalid-source-encoding]
-                USBVcom_printf("<CA>յ<BD><CB>ٶ<C8>Ϊ%f\n",speed);
-                                ^~~~ ~~~~~~~~ ~~~~
-../USB_DEVICE/App/usbd_cdc_if.c(354): warning: 'vsnprintf' size argument is too large; destination buffer has size 64, but size argument is 65 [-Wfortify-source]
-        len = vsnprintf((char*)usbtemp,sizeof(usbtemp)+1,(char*)format,args);
-              ^
-4 warnings generated.
-compiling usbd_cdc_if.c...
+compiling stm32f4xx_it.c...
 linking...
-Program Size: Code=33876 RO-data=1052 RW-data=248 ZI-data=9032  
+Program Size: Code=30168 RO-data=1036 RW-data=248 ZI-data=9128  
 FromELF: creating hex file...
-".\chassis\chassis.axf" - 0 Error(s), 4 Warning(s).
+".\chassis\chassis.axf" - 0 Error(s), 0 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -74,7 +55,7 @@ Package Vendor: Keil
 
    * Component: ARM::CMSIS:CORE:5.6.0
       Include file:  CMSIS/Core/Include/tz_context.h
-Build Time Elapsed:  00:00:01
+Build Time Elapsed:  00:00:00
 </pre>
 </body>
 </html>
