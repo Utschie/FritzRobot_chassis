@@ -20,7 +20,6 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "stm32f4xx_it.h"
-
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "encoder_control.h"
@@ -63,9 +62,7 @@ extern PCD_HandleTypeDef hpcd_USB_OTG_FS;
 extern TIM_HandleTypeDef htim6;
 extern UART_HandleTypeDef huart6;
 /* USER CODE BEGIN EV */
-extern int nEncoderTarget;
-extern int nEncoderPulse;
-extern int nPwm;
+extern Wheel wheelRB,wheelLB,wheelRF,wheelLF;
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -237,7 +234,7 @@ void OTG_FS_IRQHandler(void)
 /**
   * @brief This function handles USART6 global interrupt.
   */
-void USART6_IRQHandler(void)//
+void USART6_IRQHandler(void)
 {
   /* USER CODE BEGIN USART6_IRQn 0 */
 
@@ -254,19 +251,43 @@ void USART6_IRQHandler(void)//
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
+	
     if (htim == (&htim6))//TIM6每5ms产生一次中断负责encoder的pid
     {
-      if (nEncoderTarget==0){
-				HAL_GPIO_WritePin(GPIOF, GPIO_PIN_0, GPIO_PIN_RESET);//全都调成低电平,即关闭电机
-				HAL_GPIO_WritePin(GPIOF, GPIO_PIN_1, GPIO_PIN_RESET);
-				nEncoderPulse = GetEncoderPulse();
-			  nPwm=0;}
-			else{
-			nEncoderPulse = GetEncoderPulse();
-			SpeedInnerControl(nEncoderPulse,nEncoderTarget);
-			SetMotorVoltageAndDirection(nPwm);//调节pwm输出
-				}
+      
+				if (wheelLB.fSpeedTarget==0.0)//control left behind wheel
+					{
+				HAL_GPIO_WritePin(wheelLB.IN_GPIO_Port, wheelLB.IN1, GPIO_PIN_RESET);//全都调成低电平,即关闭电机
+				HAL_GPIO_WritePin(wheelLB.IN_GPIO_Port, wheelLB.IN2, GPIO_PIN_RESET);
+				wheelLB.fSpeedTarget = 0.0;
+				wheelLB.nEncoderTarget=Speed2Pulse(wheelLB.fSpeedTarget);
+				wheelLB.nEncoderPulse = GetEncoderPulse(&wheelLB);
+			  wheelLB.nPwm=0;}
+				else{
+				wheelLB.nEncoderTarget=Speed2Pulse(wheelLB.fSpeedTarget);
+				wheelLB.nEncoderPulse = GetEncoderPulse(&wheelLB);
+				SpeedInnerControl(&wheelLB);
+				//SetMotorVoltageAndDirection(&wheelLB);//调节pwm输出
+			      }
+				
+				if (wheelRB.fSpeedTarget==0.0)//control right behind wheel
+					{
+				HAL_GPIO_WritePin(wheelRB.IN_GPIO_Port, wheelRB.IN1, GPIO_PIN_RESET);//全都调成低电平,即关闭电机
+				HAL_GPIO_WritePin(wheelRB.IN_GPIO_Port, wheelRB.IN2, GPIO_PIN_RESET);
+				wheelRB.fSpeedTarget = 0.0;
+				wheelRB.nEncoderTarget=Speed2Pulse(wheelRB.fSpeedTarget);
+				wheelRB.nEncoderPulse = GetEncoderPulse(&wheelRB);
+			  wheelRB.nPwm=0;}
+				else{
+				wheelRB.nEncoderTarget=Speed2Pulse(wheelRB.fSpeedTarget);
+				wheelRB.nEncoderPulse = GetEncoderPulse(&wheelRB);
+				SpeedInnerControl(&wheelRB);
+				//SetMotorVoltageAndDirection(&wheelRB);//调节pwm输出
+			      }
+			
+			
     }
+	
 }
 
 /* USER CODE END 1 */

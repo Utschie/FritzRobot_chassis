@@ -90,9 +90,10 @@ int main(void)
   MX_GPIO_Init();
   MX_USART6_UART_Init();
   MX_TIM2_Init();
-  MX_USB_DEVICE_Init();
   MX_TIM9_Init();
   MX_TIM6_Init();
+  MX_TIM8_Init();
+  MX_USB_DEVICE_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */

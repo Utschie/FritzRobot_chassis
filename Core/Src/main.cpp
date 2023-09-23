@@ -48,8 +48,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-extern int nEncoderTarget;
-extern int nEncoderPulse;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -60,8 +59,7 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
-
+extern Wheel wheelRB,wheelLB,wheelRF,wheelLF;
 /* USER CODE END 0 */
 
 /**
@@ -97,11 +95,15 @@ int main(void)
   MX_USB_DEVICE_Init();
 	MX_TIM9_Init();
 	MX_TIM6_Init();
+	MX_TIM8_Init();
   /* USER CODE BEGIN 2 */
-	HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_ALL);//开启TIM4的编码器接口模式
-	HAL_TIM_PWM_Start(&htim9,TIM_CHANNEL_1);//开始pwm输出
+	HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_ALL);//开启RB Wheel的编码器接口模式
+	HAL_TIM_Encoder_Start(&htim8, TIM_CHANNEL_ALL);//开启LB Wheel的编码器接口模式
+	HAL_TIM_PWM_Start(&htim9,TIM_CHANNEL_1);//开始RB Wheel 的pwm输出
+	HAL_TIM_PWM_Start(&htim9,TIM_CHANNEL_2);//开始LB Wheel 的pwm输出
+	WheelsInit();//initialize the wheels pin, channel, encoder etc.
 	HAL_TIM_Base_Start_IT(&htim6);
-	//HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_3);//开始pwm输出
+	
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -109,7 +111,8 @@ int main(void)
   while (1)
   {
 		HAL_Delay(500);
-		USBVcom_printf("编码器模式捕获速度 = %d , 目标速度= %d\n",nEncoderPulse,nEncoderTarget);//向屏幕输出当前速度和目标速度
+		USBVcom_printf("编码器模式捕获左后轮速度 = %f, 目标速度= %f\n, 右后轮速度 = %f, 目标速度 = %f\n",Pulse2Speed(wheelLB.nEncoderPulse),wheelLB.fSpeedTarget,
+		                                                                                           Pulse2Speed(wheelRB.nEncoderPulse),wheelRB.fSpeedTarget);//向屏幕输出当前速度和目标速度
 		//uint8_t data[]="来了 \n";
 		//CDC_Transmit_FS(data,sizeof(data));//直接调用usb的函数输出
 		//调用重定向后的usb打印函数

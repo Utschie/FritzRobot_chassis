@@ -35,8 +35,7 @@
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
-extern int nEncoderTarget;
-extern float fKp,fKi;
+
 /* USER CODE END PV */
 
 /** @addtogroup STM32_USB_OTG_DEVICE_LIBRARY
@@ -114,7 +113,7 @@ uint8_t UserTxBufferFS[APP_TX_DATA_SIZE];
 extern USBD_HandleTypeDef hUsbDeviceFS;
 
 /* USER CODE BEGIN EXPORTED_VARIABLES */
-
+extern Wheel wheelRB,wheelLB,wheelRF,wheelLF;
 /* USER CODE END EXPORTED_VARIABLES */
 
 /**
@@ -267,13 +266,9 @@ static int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)
 {
   /* USER CODE BEGIN 6 */
 	USBVcomParser(Buf);
-	memset(UserRxBufferFS,0,sizeof(UserRxBufferFS));//Çå¿Õ»º´æÇø£¬ÒòÎªUserRxBufferFS×÷Îª»º´æÇøÊÇ´ÓÇ°Íùºó¸²¸ÇµÄ£¬Èç¹ûÉÏÒ»´ÎÊä³ö×Ö·û´®±È½Ï³¤µÄ»°£¬ÄÇÃ´ÕâÒ»´ÎÊä³öÊ±»á°ÑÃ»¸²¸ÇµôµÄÉÏÒ»´ÎµÄÄÚÈİ´ò³öÀ´¡£0x00ÊÇ×Ö·û´®Ä©Î²µÄÒâË¼
-	USBD_CDC_SetRxBuffer(&hUsbDeviceFS, &Buf[0]);
+	memset(UserRxBufferFS,0,sizeof(UserRxBufferFS));//
+  USBD_CDC_SetRxBuffer(&hUsbDeviceFS, &Buf[0]);
   USBD_CDC_ReceivePacket(&hUsbDeviceFS);
-	
-	//printf(Buf);
-	
-	//USBVcom_printf("ÊÕµ½Êı¾İ¿ÉÊÇÌ«Å£±ÆÁË°¡ \n");//ÊÕµ½ºóÎŞÂÛÊ²Ã´Êı¾İ¶¼Ïòusb·¢ËÍÊÕµ½Êı¾İ
   return (USBD_OK);
   /* USER CODE END 6 */
 }
@@ -299,15 +294,6 @@ uint8_t CDC_Transmit_FS(uint8_t* Buf, uint16_t Len)
   }
   USBD_CDC_SetTxBuffer(&hUsbDeviceFS, Buf, Len);
   result = USBD_CDC_TransmitPacket(&hUsbDeviceFS);
-	/*
-	while(hcdc->TxState)//Õâ¾ä»°ÊÇÒªµÈ´ı·¢ËÍÍê³É£¬·ñÔòÈç¹ûÁ¬ĞøÁ½¾ä³öÏÖCDC_Transmit_FSËû¿ÉÄÜ¾Í²»·¢ËÍÁË,ËùÒÔ×îºÃÖ»·¢ËÍÒ»´Î
-	{
-		if(HAL_GetTick() - Timeout >=10)//³¬Ê±//ÓÚ´ËÍ¬Ê±Ò²±ğÈÃËüÒ»Ö±·¢ËÍ£¬»¹ÊÇÒªÓĞ¸ötimeout
-		{
-			break;
-		}
-	}
-	*/
   /* USER CODE END 7 */
   return result;
 }
@@ -336,10 +322,9 @@ static int8_t CDC_TransmitCplt_FS(uint8_t *Buf, uint32_t *Len, uint8_t epnum)
 }
 
 /* USER CODE BEGIN PRIVATE_FUNCTIONS_IMPLEMENTATION */
-
 void USBVcom_printf(const char *format,...)//ÎÒ¸Ğ¾õÕâ¸öº¯ÊıÓĞÎÊÌâ£¬ºÃÏñÁ¬ĞøÁ½´ÎÊä³ö¾Í»á¶ª×Ö·û,ËùÒÔÒ»¸öº¯ÊıÖ»ÄÜÓÃÒ»´ÎËü¡£ÁíÍâ¾ÍÊÇ
 {
-	unsigned char usbtemp[64];
+	unsigned char usbtemp[512];//ÕâÀïµÄ512ÆäÊµÊÇÏŞÖÆÁËÊä³ö×Ö·ûµÄ³¤¶Ì£¬Èç¹û³¤¶È³¬¹ıÕâ¸öÊıÖµÔò»áÂÒÂë£¬ËùÒÔ¿ÉÒÔÉè¶¨µÄ´óÒ»Ğ©
 	uint32_t len;
 	va_list args;//´´½¨Ò»¸öva_listÀàĞÍ±äÁ¿
 	va_start(args,format);//³õÊ¼»¯¿É±ä²ÎÊıÁĞ±í£¬³õÊ¼»¯ÍêÖ®ºó¾Í¿ÉÒÔÓÃva_arg(args,int)À´µ±×öÁĞ±íÒ»ÑùÀ´·ÃÎÊÃ¿Ò»¸ö²ÎÊı
@@ -352,15 +337,28 @@ void USBVcom_printf(const char *format,...)//ÎÒ¸Ğ¾õÕâ¸öº¯ÊıÓĞÎÊÌâ£¬ºÃÏñÁ¬ĞøÁ½´ÎÊ
 void USBVcomParser(uint8_t* Buf)
 {
 	
-	if (Buf[0]==0x76)//BufÊÇÖ¸ÏòUserRxBufferFSµÄ£¬Ò²¿ÉÒÔÓÃUserRxBufferFSÌæ´ú¡£0x76ÊÇvµÄÒâË¼,±íÊ¾ËÙ¶È,×¢ÒâvĞèÒªÊ±Ğ¡Ğ´£¬ÒòÎª16½øÖÆ²»ÈÏÊ¶´óĞ´×ÖÄ¸
+	if (Buf[0]==0x76)//BufÊÇÖ¸ÏòUserRxBufferFSµÄ£¬Ò²¿ÉÒÔÓÃUserRxBufferFSÌæ´ú¡£0x76ÊÇvµÄÒâË¼,±íÊ¾ËÙ¶È,×¢ÒâvĞèÒªÊ±Ğ¡Ğ´
 	{
 		char ch_speed[64];//ÓÃÀ´¸´ÖÆ×Ö·û´®,²¢ÇÒ±£Ö¤½áÊø·û¿ÉÒÔ±»¸´ÖÆ
-		int speed;
-		strncpy(ch_speed,Buf+3,strlen(Buf+3)+1);//´ÓµÚÈıÎ»¿ªÊ¼¶ÁÈ¡Êı×ÖÒ»Ö±¶Áµ½Ä©Î²
-		speed = atoi(ch_speed);//°Ñ×Ö·û´®ch_speed×ª³ÉÕûĞÍÊı¸³¸øspeed
-		nEncoderTarget=speed;//¸ü¸ÄencoderµÄTarget
-		USBVcom_printf("ÊÕµ½Ä¿±êËÙ¶ÈÎª%d\n",speed);
+		float speed;
+		
+		if(Buf[1]==0x4c && Buf[2]==0x42)//Èç¹ûµÚ¶şÈıÎ»ÊÇLB,Çø·Ö´óĞ¡Ğ´
+		{
+			strncpy(ch_speed,Buf+5,strlen(Buf+5)+1);//´ÓµÚÁùÎ»¿ªÊ¼¶ÁÈ¡Êı×ÖÒ»Ö±¶Áµ½Ä©Î²£¬ÒòÎªµÚËÄÎ»ºÍµÚÎåÎ»ÊÇ:ºÍ¿Õ¸ñ
+		  speed = atof(ch_speed);//°Ñ×Ö·û´®ch_speed×ª³Éfloat¸³¸øspeed
+			wheelLB.fSpeedTarget = speed;
+			//wheelLB.nEncoderTarget=Speed2Pulse(speed);//¸ü¸ÄencoderµÄTarget
+			USBVcom_printf("×óºóÂÖÊÕµ½Ä¿±êËÙ¶ÈÎª%f\n",wheelLB.fSpeedTarget);
+		}else if(Buf[1]==0x52 && Buf[2]==0x42)//Èç¹ûµÚ¶şÈıÎ»ÊÇRB,Çø·Ö´óĞ¡Ğ´
+		{
+			strncpy(ch_speed,Buf+5,strlen(Buf+5)+1);//´ÓµÚÁùÎ»¿ªÊ¼¶ÁÈ¡Êı×ÖÒ»Ö±¶Áµ½Ä©Î²£¬ÒòÎªµÚËÄÎ»ºÍµÚÎåÎ»ÊÇ:ºÍ¿Õ¸ñ
+		  speed = atof(ch_speed);//°Ñ×Ö·û´®ch_speed×ª³Éfloat¸³¸øspeed
+			wheelRB.fSpeedTarget = speed;
+			//wheelLB.nEncoderTarget=Speed2Pulse(speed);//¸ü¸ÄencoderµÄTarget
+			USBVcom_printf("ÓÒºóÂÖÊÕµ½Ä¿±êËÙ¶ÈÎª%f\n",speed);
+		}
 	}
+	/*
 	else if (Buf[0]==0x6b && Buf[1]==0x69)
 	{
 		char ch_ki[64];
@@ -378,6 +376,7 @@ void USBVcomParser(uint8_t* Buf)
 		fKp=kp;
 		USBVcom_printf("ÊÕµ½±ÈÀı²ÎÊıKpÎª%f\n",kp);
 	}
+	*/
 }
 /* USER CODE END PRIVATE_FUNCTIONS_IMPLEMENTATION */
 
