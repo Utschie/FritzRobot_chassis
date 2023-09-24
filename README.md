@@ -1,4 +1,6 @@
 # FritzRobot_chassis
+## 2023-09-24 update
+### reorganize the codes, define new data type and functions to make the code more modular and readable
 ## 2023-09-19 update
 ### PI control motor，Ki=3.0 and Kp=45. The control result shows like，
 ![avatar](./pictures/encoder_control_result.png)
