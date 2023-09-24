@@ -9,7 +9,6 @@ int nPpr=1560;//Number of Pulse per round of motor
 float fKp = 45.0;
 float fKi = 3.0;//比例参数和积分参数
 Wheel wheelRB,wheelLB,wheelRF,wheelLF;//define right behind wheel, left behind wheel, right front wheel, left front wheel
-
 void WheelsInit(void)//the global variable can only defined outside a fuction. It can't be assigned outside a function, so it needs a init function.
 {
 	wheelRB.nEncoderTarget=0;
@@ -50,6 +49,7 @@ float Pulse2Speed(int nPulse)
 	fSpeed = nPulse*(2*pi*fRadius)/(fSp*nPpr);
 	return fSpeed;
 }
+
 int GetEncoderPulse(Wheel* wheel)//获取对应轮子读出来的编码器脉冲
 {
 		int nPulse;//存放从TIM4定时器读出来的编码器脉冲
@@ -62,7 +62,7 @@ void SpeedInnerControl(Wheel* wheel)//速度内环控制
 {
     int nError;//偏差
 	  int nPwmBais;
-		
+	//PID
     nError = (*wheel).nEncoderTarget-(*wheel).nEncoderPulse;//偏差 = 目标速度 - 实际速度，这里的nTarget应该跟pulse的量纲是一样的，也就是target就是目标pulse
 
     nPwmBais = fKp * (nError - (*wheel).nErrorPrev) + fKi * nError;//增量式PI控制器
@@ -91,7 +91,22 @@ void SpeedInnerControl(Wheel* wheel)//速度内环控制
     return;//返回输出值
 }
 
-
+void WheelControlCallback(Wheel* wheel)//This function is used in HAL_TIM_PeriodElapsedCallback to control the motor every interaption
+{
+	if ((*wheel).fSpeedTarget==0.0)//control left behind wheel
+	{
+		HAL_GPIO_WritePin((*wheel).IN_GPIO_Port, (*wheel).IN1, GPIO_PIN_RESET);//全都调成低电平,即关闭电机
+		HAL_GPIO_WritePin((*wheel).IN_GPIO_Port, (*wheel).IN2, GPIO_PIN_RESET);
+		(*wheel).fSpeedTarget = 0.0;
+		(*wheel).nEncoderTarget=Speed2Pulse((*wheel).fSpeedTarget);
+		(*wheel).nEncoderPulse = GetEncoderPulse(wheel);
+		(*wheel).nPwm=0;}
+	else{
+		(*wheel).nEncoderTarget=Speed2Pulse((*wheel).fSpeedTarget);
+		(*wheel).nEncoderPulse = GetEncoderPulse(wheel);
+		SpeedInnerControl(wheel);
+		}
+}
 /*
 void SetMotorVoltageAndDirection(Wheel* wheel)//Right behind wheel
 {

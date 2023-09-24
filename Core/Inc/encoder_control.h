@@ -26,6 +26,7 @@ typedef struct _Wheel
 void WheelsInit(void);
 int GetEncoderPulse(Wheel* wheel);
 void SpeedInnerControl(Wheel* wheel);
+void WheelControlCallback(Wheel* wheel);
 //void SetMotorVoltageAndDirection(Wheel* wheel);
 int Speed2Pulse(float fSpeedTarget);
 float Pulse2Speed(int nPulse);

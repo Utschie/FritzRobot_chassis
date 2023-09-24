@@ -254,7 +254,9 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	
     if (htim == (&htim6))//TIM6每5ms产生一次中断负责encoder的pid
     {
-      
+			WheelControlCallback(&wheelLB);
+			WheelControlCallback(&wheelRB);
+			/*
 				if (wheelLB.fSpeedTarget==0.0)//control left behind wheel
 					{
 				HAL_GPIO_WritePin(wheelLB.IN_GPIO_Port, wheelLB.IN1, GPIO_PIN_RESET);//全都调成低电平,即关闭电机
@@ -284,8 +286,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 				SpeedInnerControl(&wheelRB);
 				//SetMotorVoltageAndDirection(&wheelRB);//调节pwm输出
 			      }
-			
-			
+      */						
     }
 	
 }
