@@ -27,6 +27,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "encoder_control.h"
+#include "mecanum.h"
 /* USER CODE END INCLUDE */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -114,6 +115,7 @@ extern USBD_HandleTypeDef hUsbDeviceFS;
 
 /* USER CODE BEGIN EXPORTED_VARIABLES */
 extern Wheel wheelRB,wheelLB,wheelRF,wheelLF;
+extern float CarSpeedTarget[3];
 /* USER CODE END EXPORTED_VARIABLES */
 
 /**
@@ -347,16 +349,40 @@ void USBVcomParser(uint8_t* Buf)
 			strncpy(ch_speed,Buf+5,strlen(Buf+5)+1);//从第六位开始读取数字一直读到末尾，因为第四位和第五位是:和空格
 		  speed = atof(ch_speed);//把字符串ch_speed转成float赋给speed
 			wheelLB.fSpeedTarget = speed;
-			//wheelLB.nEncoderTarget=Speed2Pulse(speed);//更改encoder的Target
 			USBVcom_printf("左后轮收到目标速度为%f\n",wheelLB.fSpeedTarget);
 		}else if(Buf[1]==0x52 && Buf[2]==0x42)//如果第二三位是RB,区分大小写
 		{
-			strncpy(ch_speed,Buf+5,strlen(Buf+5)+1);//从第六位开始读取数字一直读到末尾，因为第四位和第五位是:和空格
-		  speed = atof(ch_speed);//把字符串ch_speed转成float赋给speed
+			strncpy(ch_speed,Buf+5,strlen(Buf+5)+1);
+		  speed = atof(ch_speed);
 			wheelRB.fSpeedTarget = speed;
-			//wheelLB.nEncoderTarget=Speed2Pulse(speed);//更改encoder的Target
 			USBVcom_printf("右后轮收到目标速度为%f\n",speed);
+		}else if(Buf[1]==0x4c && Buf[2]==0x46)//如果第二三位是LF
+		{
+			strncpy(ch_speed,Buf+5,strlen(Buf+5)+1);
+		  speed = atof(ch_speed);
+			wheelLF.fSpeedTarget = speed;
+			USBVcom_printf("左前轮收到目标速度为%f\n",wheelLF.fSpeedTarget);
+		}else if(Buf[1]==0x52 && Buf[2]==0x46)//如果第二三位是RF
+		{
+			strncpy(ch_speed,Buf+5,strlen(Buf+5)+1);
+		  speed = atof(ch_speed);
+			wheelRF.fSpeedTarget = speed;
+			USBVcom_printf("右前轮收到目标速度为%f\n",wheelRF.fSpeedTarget);
 		}
+	}
+	else if(Buf[0]==0x56)//如果给出的速度是大写的V
+	{
+		
+		char ch[32];
+		int i=0;
+		strcpy(ch,Buf+3);//速度最多给到一位小数，也就是速度占3个位x.x
+		char *p = strtok(ch," ");
+		while (p != NULL) {
+    CarSpeedTarget[i++] = atof(p);     // 将子字符串转换为整数并存储到数组中
+    p = strtok(NULL, " ");
+    }
+    Speed2Wheels(CarSpeedTarget[0],CarSpeedTarget[1],CarSpeedTarget[2]);
+		USBVcom_printf("车身收到目标速度为[%f, %f, %f]\n",CarSpeedTarget[0],CarSpeedTarget[1],CarSpeedTarget[2]);
 	}
 	/*
 	else if (Buf[0]==0x6b && Buf[1]==0x69)

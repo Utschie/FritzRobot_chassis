@@ -24,6 +24,7 @@
 /* USER CODE BEGIN Includes */
 #include "encoder_control.h"
 #include "usbd_cdc_if.h"
+#include "mecanum.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -256,6 +257,9 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     {
 			WheelControlCallback(&wheelLB);
 			WheelControlCallback(&wheelRB);
+			WheelControlCallback(&wheelLF);
+			WheelControlCallback(&wheelRF);
+			Wheels2Speed(&CarSpeedActual);
 			/*
 				if (wheelLB.fSpeedTarget==0.0)//control left behind wheel
 					{

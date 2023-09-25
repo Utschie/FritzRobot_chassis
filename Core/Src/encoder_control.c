@@ -5,7 +5,7 @@
 const float fRadius=0.0375;//unit [m], wheel's radius 
 const float fSp=0.005;//unit [s],sampling period
 const float pi=3.1415926f;
-int nPpr=1560;//Number of Pulse per round of motor
+int nPpr=1560;//Number of Pulse per round of motor,四倍频所以1560
 float fKp = 45.0;
 float fKi = 3.0;//比例参数和积分参数
 Wheel wheelRB,wheelLB,wheelRF,wheelLF;//define right behind wheel, left behind wheel, right front wheel, left front wheel
@@ -30,6 +30,26 @@ void WheelsInit(void)//the global variable can only defined outside a fuction. I
 	wheelLB.IN2=GPIO_PIN_0;
 	wheelLB.fSpeedTarget=0.0;
 	wheelLB.nEncoderTarget=0;
+	
+	wheelRF.nEncoderTarget=0;
+	wheelRF.EncoderTim = &htim5;
+	wheelRF.PwmTim= &htim3;
+	wheelRF.PwmChannel=TIM_CHANNEL_3;
+	wheelRF.IN_GPIO_Port=GPIOA;
+	wheelRF.IN1=GPIO_PIN_5;
+	wheelRF.IN2=GPIO_PIN_4;
+	wheelRF.fSpeedTarget=0.0;
+	wheelRF.nEncoderTarget=0;
+	
+	wheelLF.nEncoderTarget=0;
+	wheelLF.EncoderTim = &htim4;
+	wheelLF.PwmTim= &htim3;
+	wheelLF.PwmChannel=TIM_CHANNEL_4;
+	wheelLF.IN_GPIO_Port=GPIOC;
+	wheelLF.IN1=GPIO_PIN_5;
+	wheelLF.IN2=GPIO_PIN_1;
+	wheelLF.fSpeedTarget=0.0;
+	wheelLF.nEncoderTarget=0;
 	
 }
 
@@ -93,6 +113,7 @@ void SpeedInnerControl(Wheel* wheel)//速度内环控制
 
 void WheelControlCallback(Wheel* wheel)//This function is used in HAL_TIM_PeriodElapsedCallback to control the motor every interaption
 {
+	
 	if ((*wheel).fSpeedTarget==0.0)//control left behind wheel
 	{
 		HAL_GPIO_WritePin((*wheel).IN_GPIO_Port, (*wheel).IN1, GPIO_PIN_RESET);//全都调成低电平,即关闭电机
@@ -100,12 +121,22 @@ void WheelControlCallback(Wheel* wheel)//This function is used in HAL_TIM_Period
 		(*wheel).fSpeedTarget = 0.0;
 		(*wheel).nEncoderTarget=Speed2Pulse((*wheel).fSpeedTarget);
 		(*wheel).nEncoderPulse = GetEncoderPulse(wheel);
+		(*wheel).fSpeedActual = Pulse2Speed((*wheel).nEncoderPulse);
 		(*wheel).nPwm=0;}
 	else{
 		(*wheel).nEncoderTarget=Speed2Pulse((*wheel).fSpeedTarget);
 		(*wheel).nEncoderPulse = GetEncoderPulse(wheel);
+		(*wheel).fSpeedActual = Pulse2Speed((*wheel).nEncoderPulse);
 		SpeedInnerControl(wheel);
 		}
+	
+	/*如果不规定为0的时候断电的话，它在速度降到0的时候不会收敛到0，而是在0的附近活动，这样很不好
+	(*wheel).nEncoderTarget=Speed2Pulse((*wheel).fSpeedTarget);
+	(*wheel).nEncoderPulse = GetEncoderPulse(wheel);
+	(*wheel).fSpeedActual = Pulse2Speed((*wheel).nEncoderPulse);
+	SpeedInnerControl(wheel);
+	*/
+	
 }
 /*
 void SetMotorVoltageAndDirection(Wheel* wheel)//Right behind wheel

@@ -7,6 +7,7 @@
 ".\chassis\usart.o"
 ".\chassis\stm32f4xx_it.o"
 ".\chassis\stm32f4xx_hal_msp.o"
+".\chassis\mecanum.o"
 ".\chassis\stm32f4xx_hal_pcd.o"
 ".\chassis\stm32f4xx_hal_pcd_ex.o"
 ".\chassis\stm32f4xx_ll_usb.o"

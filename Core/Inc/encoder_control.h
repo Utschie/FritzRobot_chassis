@@ -21,6 +21,7 @@ typedef struct _Wheel
 	int nEncoderTarget;
 	int nEncoderPulse;
 	float fSpeedTarget;
+	float fSpeedActual;
 	
 } Wheel; //define wheel's type 
 void WheelsInit(void);
