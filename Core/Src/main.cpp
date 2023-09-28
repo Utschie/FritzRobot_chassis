@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "spi.h"
 #include "tim.h"
 #include "usart.h"
 #include "usb_device.h"
@@ -29,6 +30,7 @@
 #include "usbd_cdc_if.h"
 #include "encoder_control.h"
 #include "mecanum.h"
+#include "bsp_imu.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -61,6 +63,7 @@ void SystemClock_Config(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 extern Wheel wheelRB,wheelLB,wheelRF,wheelLF;
+
 /* USER CODE END 0 */
 
 /**
@@ -99,7 +102,9 @@ int main(void)
 	MX_TIM3_Init();
   MX_TIM4_Init();
   MX_TIM5_Init();
+	MX_TIM7_Init();
 	MX_USB_DEVICE_Init();
+	MX_SPI5_Init();
   /* USER CODE BEGIN 2 */
 	HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_ALL);//RB Wheel Encoder
 	HAL_TIM_Encoder_Start(&htim4, TIM_CHANNEL_ALL);//LF Wheel Encoder
@@ -111,7 +116,7 @@ int main(void)
 	HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_4);//LF Wheel pwm
 	WheelsInit();//initialize the wheels pin, channel, encoder etc.
 	HAL_TIM_Base_Start_IT(&htim6);//5ms interuption period 
-	
+	mpu_device_init;
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -120,7 +125,7 @@ int main(void)
   {
 		HAL_Delay(500);
 		//Wheels2Speed(CarSpeedActual);//read speed from data
-		USBVcom_printf("当前速度为[%f, %f, %f]，\n 目标速度为[%f, %f, %f]",CarSpeedActual[0],CarSpeedActual[1],CarSpeedActual[2],CarSpeedTarget[0],CarSpeedTarget[1],CarSpeedTarget[2]);//向屏幕输出当前速度和目标速度
+		//USBVcom_printf("当前速度为[%f, %f, %f]，\n 目标速度为[%f, %f, %f]",CarSpeedActual[0],CarSpeedActual[1],CarSpeedActual[2],CarSpeedTarget[0],CarSpeedTarget[1],CarSpeedTarget[2]);//向屏幕输出当前速度和目标速度
 		/*
 		USBVcom_printf("编码器模式捕获左后轮速度 = %f， 目标速度= %f，\n 右后轮速度 = %f， 目标速度 = %f，\n 左前轮速度 = %f, 目标速度= %f，\n 右前轮速度 = %f， 目标速度 = %f，\n",Pulse2Speed(wheelLB.nEncoderPulse),wheelLB.fSpeedTarget,
 		                                                                                           Pulse2Speed(wheelRB.nEncoderPulse),wheelRB.fSpeedTarget,

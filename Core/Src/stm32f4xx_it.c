@@ -25,6 +25,7 @@
 #include "encoder_control.h"
 #include "usbd_cdc_if.h"
 #include "mecanum.h"
+#include "bsp_imu.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -64,6 +65,7 @@ extern TIM_HandleTypeDef htim6;
 extern UART_HandleTypeDef huart6;
 /* USER CODE BEGIN EV */
 extern Wheel wheelRB,wheelLB,wheelRF,wheelLF;
+extern imu_t              imu;
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -260,6 +262,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 			WheelControlCallback(&wheelLF);
 			WheelControlCallback(&wheelRF);
 			Wheels2Speed(&CarSpeedActual);
+			mpu_get_data();
+			USBVcom_printf("IMU加速度为 x: %f\n y: %f\n z: %f\n, 角速度为x: %f\n y: %f\n z: %f\n",imu.ax,imu.az,imu.az,imu.wx,imu.wy,imu.wz);
 			/*
 				if (wheelLB.fSpeedTarget==0.0)//control left behind wheel
 					{

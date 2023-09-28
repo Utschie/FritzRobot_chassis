@@ -1,13 +1,12 @@
 --cpu=Cortex-M4.fp.sp
 ".\chassis\startup_stm32f427xx.o"
 ".\chassis\main.o"
-".\chassis\encoder_control.o"
 ".\chassis\gpio.o"
+".\chassis\spi.o"
 ".\chassis\tim.o"
 ".\chassis\usart.o"
 ".\chassis\stm32f4xx_it.o"
 ".\chassis\stm32f4xx_hal_msp.o"
-".\chassis\mecanum.o"
 ".\chassis\stm32f4xx_hal_pcd.o"
 ".\chassis\stm32f4xx_hal_pcd_ex.o"
 ".\chassis\stm32f4xx_ll_usb.o"
@@ -24,6 +23,7 @@
 ".\chassis\stm32f4xx_hal_cortex.o"
 ".\chassis\stm32f4xx_hal.o"
 ".\chassis\stm32f4xx_hal_exti.o"
+".\chassis\stm32f4xx_hal_spi.o"
 ".\chassis\stm32f4xx_hal_tim.o"
 ".\chassis\stm32f4xx_hal_tim_ex.o"
 ".\chassis\stm32f4xx_hal_uart.o"
@@ -36,6 +36,10 @@
 ".\chassis\usbd_ctlreq.o"
 ".\chassis\usbd_ioreq.o"
 ".\chassis\usbd_cdc.o"
+".\chassis\encoder_control.o"
+".\chassis\mecanum.o"
+".\chassis\imu.o"
+".\chassis\bsp_imu.o"
 --strict --scatter ".\chassis\chassis.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers
