@@ -314,7 +314,7 @@
           </ArmAdsMisc>
           <Cads>
             <interw>1</interw>
-            <Optim>3</Optim>
+            <Optim>4</Optim>
             <oTime>0</oTime>
             <SplitLS>0</SplitLS>
             <OneElfS>1</OneElfS>
@@ -1487,7 +1487,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>Application/User/Imu</GroupName>
+          <GroupName>Application/User/IMU</GroupName>
           <Files>
             <File>
               <FileName>imu.h</FileName>
@@ -1505,19 +1505,19 @@
               <FilePath>..\Core\Inc\mpu6500_reg.h</FilePath>
             </File>
             <File>
-              <FileName>bsp_imu.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Core\Inc\bsp_imu.h</FilePath>
-            </File>
-            <File>
-              <FileName>bsp_imu.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\bsp_imu.c</FilePath>
-            </File>
-            <File>
               <FileName>mytype.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\Core\Inc\mytype.h</FilePath>
+            </File>
+            <File>
+              <FileName>filters.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\filters.c</FilePath>
+            </File>
+            <File>
+              <FileName>filters.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Core\Inc\filters.h</FilePath>
             </File>
           </Files>
         </Group>

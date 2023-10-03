@@ -63,10 +63,7 @@ extern mpu_data_t mpu_data;
 extern imu_t      imu;
 
 uint8_t mpu_device_init(void);
-void init_quaternion(void);
 void mpu_get_data(void);
-//void imu_ahrs_update(void);
-//void imu_attitude_update(void);
 void mpu_offset_call(void);
 
 #endif

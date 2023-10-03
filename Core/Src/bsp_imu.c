@@ -15,8 +15,6 @@
 #include "mpu6500_reg.h"
 #include "spi.h"
 
-#define BOARD_DOWN (1)   
-#define IST8310
 #define MPU_HSPI hspi5
 #define MPU_NSS_LOW HAL_GPIO_WritePin(GPIOF, GPIO_PIN_6, GPIO_PIN_RESET)
 #define MPU_NSS_HIGH HAL_GPIO_WritePin(GPIOF, GPIO_PIN_6, GPIO_PIN_SET)
@@ -35,24 +33,6 @@ uint8_t               ist_buff[6];                           /* buffer to save I
 mpu_data_t            mpu_data;
 imu_t                 imu={0};
 
-/**
-  * @brief  fast inverse square-root, to calculate 1/Sqrt(x)
-  * @param  x: the number need to be calculated
-  * @retval 1/Sqrt(x)
-  * @usage  call in imu_ahrs_update() function
-  */
-float inv_sqrt(float x) 
-{
-	float halfx = 0.5f * x;
-	float y     = x;
-	long  i     = *(long*)&y;
-	
-	i = 0x5f3759df - (i >> 1);
-	y = *(float*)&i;
-	y = y * (1.5f - (halfx * y * y));
-	
-	return y;
-}
 
 /**
   * @brief  write a byte of data to specified register
@@ -70,12 +50,12 @@ float inv_sqrt(float x)
 uint8_t mpu_write_byte(uint8_t const reg, uint8_t const data)
 {
     MPU_NSS_LOW;
-	tx = reg & 0x7F;//& 0x7F 是使reg的第一位为0，0x7F的二进制表示是01111111
-    HAL_SPI_TransmitReceive(&MPU_HSPI, &tx, &rx, 1, 55);
+	  tx = reg & 0x7F;//& 0x7F 是使reg的第一位为0，0x7F的二进制表示是01111111，第一位为0意味着是写入
+	  HAL_SPI_TransmitReceive(&MPU_HSPI, &tx, &rx, 1, 55);//MPU6500的spi通信模式是首先发送一个寄存器地址，如果寄存器地址第一位为1则为read，如果为0，则为write，这是mpu6500的寄存器地址格式
     tx = data;
-    HAL_SPI_TransmitReceive(&MPU_HSPI, &tx, &rx, 1, 55);
+	  HAL_SPI_TransmitReceive(&MPU_HSPI, &tx, &rx, 1, 55);//在上一步告知要进行写入操作后，把data发送过去。由于spi是全双工，因此写入的同时rx也读到了数据，当然这里不需要返回
     MPU_NSS_HIGH;
-    return 0;
+	return 0;//因为是写入，所以rx内的值不需要被返回，所以丢弃
 }
 
 /**
@@ -87,12 +67,12 @@ uint8_t mpu_write_byte(uint8_t const reg, uint8_t const data)
   */
 uint8_t mpu_read_byte(uint8_t const reg)
 {
-    MPU_NSS_LOW;
-	tx = reg | 0x80;//| 0x80的意思是使reg的第一位取1，因为0x80的二进制是10000000，|是按位取或
-    HAL_SPI_TransmitReceive(&MPU_HSPI, &tx, &rx, 1, 55);
-    HAL_SPI_TransmitReceive(&MPU_HSPI, &tx, &rx, 1, 55);
+	  MPU_NSS_LOW;//选中mpu对应的从机，开始通讯
+	  tx = reg | 0x80;//| 0x80的意思是使reg的第一位取1，因为0x80的二进制是10000000，|是按位取或，第一位是1意味着是读取
+    HAL_SPI_TransmitReceive(&MPU_HSPI, &tx, &rx, 1, 55);//首先告诉mpu6500要读取了，这里的参数1意味着一个字节
+    HAL_SPI_TransmitReceive(&MPU_HSPI, &tx, &rx, 1, 55);//然后开始接收数据到rx里，这里tx是什么都无所谓，也可以是0xff，即空字节，
     MPU_NSS_HIGH;
-    return rx;
+    return rx;//读到的数据返回
 }
 
 /**
@@ -103,60 +83,16 @@ uint8_t mpu_read_byte(uint8_t const reg)
   *                 mpu_get_data(), 
   *                 mpu_offset_call() function
   */
-uint8_t mpu_read_bytes(uint8_t const regAddr, uint8_t* pData, uint8_t len)
+uint8_t mpu_read_bytes(uint8_t const regAddr, uint8_t* pData, uint8_t len)//C语言返回多个值都是通过待填充的数据指针放入函数参数的方式
 {
     MPU_NSS_LOW;
-    tx         = regAddr | 0x80;
+    tx = regAddr | 0x80;
     tx_buff[0] = tx;
-    HAL_SPI_TransmitReceive(&MPU_HSPI, &tx, &rx, 1, 55);
-    HAL_SPI_TransmitReceive(&MPU_HSPI, tx_buff, pData, len, 55);
+	  HAL_SPI_TransmitReceive(&MPU_HSPI, &tx, &rx, 1, 55);//首先传入一个地址字节,所有寄存器的地址都是一个字节，在mpu_6500_reg.h里用16进制表示是4个字符
+	  HAL_SPI_TransmitReceive(&MPU_HSPI, tx_buff, pData, len, 55);//这里的len就是表示我要读取多少个字节的数据
     MPU_NSS_HIGH;
     return 0;
 }
-
-/**
-	* @brief  write IST8310 register through MPU6500's I2C master
-  * @param  addr: the address to be written of IST8310's register
-  *         data: data to be written
-	* @retval   
-  * @usage  call in ist8310_init() function
-	*/
-static void ist_reg_write_by_mpu(uint8_t addr, uint8_t data)
-{
-    /* turn off slave 1 at first */
-    mpu_write_byte(MPU6500_I2C_SLV1_CTRL, 0x00);
-    MPU_DELAY(2);
-    mpu_write_byte(MPU6500_I2C_SLV1_REG, addr);
-    MPU_DELAY(2);
-    mpu_write_byte(MPU6500_I2C_SLV1_DO, data);
-    MPU_DELAY(2);
-    /* turn on slave 1 with one byte transmitting */
-    mpu_write_byte(MPU6500_I2C_SLV1_CTRL, 0x80 | 0x01);
-    /* wait longer to ensure the data is transmitted from slave 1 */
-    MPU_DELAY(10);
-}
-
-/**
-	* @brief  write IST8310 register through MPU6500's I2C Master
-	* @param  addr: the address to be read of IST8310's register
-	* @retval 
-  * @usage  call in ist8310_init() function
-	*/
-static uint8_t ist_reg_read_by_mpu(uint8_t addr)
-{
-    uint8_t retval;
-    mpu_write_byte(MPU6500_I2C_SLV4_REG, addr);
-    MPU_DELAY(10);
-    mpu_write_byte(MPU6500_I2C_SLV4_CTRL, 0x80);
-    MPU_DELAY(10);
-    retval = mpu_read_byte(MPU6500_I2C_SLV4_DI);
-    /* turn off slave4 after read */
-    mpu_write_byte(MPU6500_I2C_SLV4_CTRL, 0x00);
-    MPU_DELAY(10);
-    return retval;
-}
-
-
 
 
 /**
@@ -167,19 +103,24 @@ static uint8_t ist_reg_read_by_mpu(uint8_t addr)
 	*/
 void mpu_get_data()
 {
-	mpu_read_bytes(MPU6500_ACCEL_XOUT_H, mpu_buff, 14);//长度为14即为mpu_buff的长度
+	  mpu_read_bytes(MPU6500_ACCEL_XOUT_H, mpu_buff, 14);//从寄存器地址MPU6500_ACCEL_XOUT_H到MPU6500_GYRO_ZOUT_L，是刚好连续的14个字节。数据是按着地址连续排列的，告诉spi某个地址，其实就是在告诉它从哪个地址开始往下读
 
 	  mpu_data.ax   = mpu_buff[0] << 8 | mpu_buff[1];//mpu_data.ax是一个16位的整型，mpu_buff是一个长度为14的8位整型数组，这个公式是将高八位和第八位合成一个16为，形式为“s =  (high << 8) | low;”。
     mpu_data.ay   = mpu_buff[2] << 8 | mpu_buff[3];
     mpu_data.az   = mpu_buff[4] << 8 | mpu_buff[5];
-    mpu_data.temp = mpu_buff[6] << 8 | mpu_buff[7];
+    //mpu_data.temp = mpu_buff[6] << 8 | mpu_buff[7];
 
-    mpu_data.gx = ((mpu_buff[8]  << 8 | mpu_buff[9])  - mpu_data.gx_offset);
-    mpu_data.gy = ((mpu_buff[10] << 8 | mpu_buff[11]) - mpu_data.gy_offset);
-    mpu_data.gz = ((mpu_buff[12] << 8 | mpu_buff[13]) - mpu_data.gz_offset);
+    //mpu_data.gx = ((mpu_buff[8]  << 8 | mpu_buff[9])  - mpu_data.gx_offset);
+    //mpu_data.gy = ((mpu_buff[10] << 8 | mpu_buff[11]) - mpu_data.gy_offset);
+    //mpu_data.gz = ((mpu_buff[12] << 8 | mpu_buff[13]) - mpu_data.gz_offset);
+		mpu_data.gx = (mpu_buff[8]  << 8 | mpu_buff[9]);//offset准备在之后标定的时候算
+    mpu_data.gy = (mpu_buff[10] << 8 | mpu_buff[11]);
+    mpu_data.gz = (mpu_buff[12] << 8 | mpu_buff[13]);
 
-
-    memcpy(&imu.ax, &mpu_data.ax, 6 * sizeof(int16_t));
+	  memcpy(&imu.ax, &mpu_data.ax, 6 * sizeof(int16_t));//?为什么是6呢
+	  imu.ax   = mpu_data.ax; 
+    imu.ay   = mpu_data.ay; 
+    imu.az   = mpu_data.az;
 	
     //imu.temp = 21 + mpu_data.temp / 333.87f;温度
 	  /* 2000dps -> rad/s */
@@ -258,7 +199,7 @@ void mpu_offset_call(void)
 	int i;
 	for (i=0; i<300;i++)
 	{
-		mpu_read_bytes(MPU6500_ACCEL_XOUT_H, mpu_buff, 14);
+		mpu_read_bytes(MPU6500_ACCEL_XOUT_H, mpu_buff, 14);//这里其实就是把静止情况下的设为offset
 
 		mpu_data.ax_offset += mpu_buff[0] << 8 | mpu_buff[1];
 		mpu_data.ay_offset += mpu_buff[2] << 8 | mpu_buff[3];

@@ -160,6 +160,21 @@
           <WinNumber>1</WinNumber>
           <ItemText>wheelLF</ItemText>
         </Ww>
+        <Ww>
+          <count>2</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>imu</ItemText>
+        </Ww>
+        <Ww>
+          <count>3</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>mpu_data</ItemText>
+        </Ww>
+        <Ww>
+          <count>4</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>MPU6500_GYRO_CONFIG</ItemText>
+        </Ww>
       </WatchWindow1>
       <WatchWindow2>
         <Ww>
@@ -767,7 +782,7 @@
   </Group>
 
   <Group>
-    <GroupName>Application/User/Imu</GroupName>
+    <GroupName>Application/User/IMU</GroupName>
     <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
@@ -815,8 +830,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\Core\Inc\bsp_imu.h</PathWithFileName>
-      <FilenameWithoutPath>bsp_imu.h</FilenameWithoutPath>
+      <PathWithFileName>..\Core\Inc\mytype.h</PathWithFileName>
+      <FilenameWithoutPath>mytype.h</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -827,8 +842,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\Core\Src\bsp_imu.c</PathWithFileName>
-      <FilenameWithoutPath>bsp_imu.c</FilenameWithoutPath>
+      <PathWithFileName>..\Core\Src\filters.c</PathWithFileName>
+      <FilenameWithoutPath>filters.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -839,8 +854,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\Core\Inc\mytype.h</PathWithFileName>
-      <FilenameWithoutPath>mytype.h</FilenameWithoutPath>
+      <PathWithFileName>..\Core\Inc\filters.h</PathWithFileName>
+      <FilenameWithoutPath>filters.h</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

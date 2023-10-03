@@ -326,7 +326,7 @@ static int8_t CDC_TransmitCplt_FS(uint8_t *Buf, uint32_t *Len, uint8_t epnum)
 /* USER CODE BEGIN PRIVATE_FUNCTIONS_IMPLEMENTATION */
 void USBVcom_printf(const char *format,...)//我感觉这个函数有问题，好像连续两次输出就会丢字符,所以一个函数只能用一次它。另外就是
 {
-	unsigned char usbtemp[512];//这里的512其实是限制了输出字符的长短，如果长度超过这个数值则会乱码，所以可以设定的大一些
+	unsigned char usbtemp[128];//这里的512其实是限制了输出字符的长短，如果长度超过这个数值则会乱码，所以可以设定的大一些
 	uint32_t len;
 	va_list args;//创建一个va_list类型变量
 	va_start(args,format);//初始化可变参数列表，初始化完之后就可以用va_arg(args,int)来当做列表一样来访问每一个参数

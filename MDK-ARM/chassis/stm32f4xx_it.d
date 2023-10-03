@@ -46,6 +46,6 @@
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\string.h \
   ..\Middlewares\ST\STM32_USB_Device_Library\Core\Inc\usbd_core.h \
   ..\Middlewares\ST\STM32_USB_Device_Library\Core\Inc\usbd_ctlreq.h \
-  ..\Core\Inc\mecanum.h ..\Core\Inc\bsp_imu.h ..\Core\Inc\mytype.h \
+  ..\Core\Inc\mecanum.h ..\Core\Inc\imu.h ..\Core\Inc\mytype.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdarg.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdbool.h
