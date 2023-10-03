@@ -101,11 +101,11 @@ void mpu_get_data()
     mpu_data.gy = ((mpu_buff[10] << 8 | mpu_buff[11]) - mpu_data.gy_offset);
     mpu_data.gz = ((mpu_buff[12] << 8 | mpu_buff[13]) - mpu_data.gz_offset);
 	
-		memcpy(&imu.ax, &mpu_data.ax, 6 * sizeof(int16_t));
+		//memcpy(&imu.ax, &mpu_data.ax, 6 * sizeof(int16_t));
 
-	  //imu.ax   = mpu_data.ax; //由于它读数总是2000多，所以好像不转化化成浮点数也行
-    //imu.ay   = mpu_data.ay; 
-    //imu.az   = mpu_data.az;
+	  imu.ax   = mpu_data.ax / 8192.0; //因为量程是4g
+    imu.ay   = mpu_data.ay / 8192.0; 
+    imu.az   = mpu_data.az / 8192.0;
 	
 	  imu.wx   = mpu_data.gx / (131.068f*57.29578f); //量程设置为250度每秒，量程越小精度越高
     imu.wy   = mpu_data.gy / (131.068f*57.29578f); 
@@ -154,8 +154,8 @@ uint8_t mpu_device_init(void)
 																			{ MPU6500_PWR_MGMT_1, 0x03 },     /* Clock Source - Gyro-Z */ 
 																			{ MPU6500_PWR_MGMT_2, 0x00 },     /* Enable Acc & Gyro */ 
 																			{ MPU6500_CONFIG, 0x02 },         /* 0x04的二进制第1位为1所以LPF 92Hz */ 
-																			{ MPU6500_GYRO_CONFIG, 0x18 },    /* +-2000dps */ 
-																			{ MPU6500_ACCEL_CONFIG, 0x10 },   /* +-8G */ 
+																			{ MPU6500_GYRO_CONFIG, 0x00 },    /* +-250dps */ 
+																			{ MPU6500_ACCEL_CONFIG, 0x08 },   /* +-4G */ 
 																			{ MPU6500_ACCEL_CONFIG_2, 0x02 }, /* enable LowPassFilter  92hz */ 
 																			{ MPU6500_USER_CTRL, 0x20 },};    /* Enable AUX */ 
 	for (i = 0; i < 10; i++)
@@ -164,8 +164,8 @@ uint8_t mpu_device_init(void)
 		MPU_DELAY(1);
 	}
 
-	mpu_set_gyro_fsr(0); //	250 dps
-	mpu_set_accel_fsr(1);// 这个参数很奇怪，就是设为0，1,3的时候读数都为2000多，而设为2的时候读数位1000多
+	//mpu_set_gyro_fsr(0); //	这两个函数好像不太好使，所以直接在设置里设置了
+	//mpu_set_accel_fsr(1);// 这两个函数好像不太好使
 
 	mpu_offset_call();
 	return 0;

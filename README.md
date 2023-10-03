@@ -1,6 +1,8 @@
 # FritzRobot_chassis
 ### 2023-10-03 update
 IMU raw data sent out. The sampling rate of gyro and accel is 200hz, the DLPF for gyro and accel are both set to 92hz, the range of gyro is 250 dps, and accel is 4g.
+![avatar](./pictures/accel.png)
+![avatar](./pictures/gyro.png)
 ### 2023-09-25 update
 McNamee's Wheel Forward and Reverse Kinematics Solved
 ### 2023-09-24 update

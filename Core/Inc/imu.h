@@ -32,9 +32,9 @@ typedef struct
 
 typedef struct
 {
-	int16_t ax;
-	int16_t ay;
-	int16_t az;
+	float ax;
+	float ay;
+	float az;
 
 	float temp;
 

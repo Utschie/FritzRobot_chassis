@@ -285,7 +285,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		else if (htim == (&htim7))
 		{
 			mpu_get_data();
-			USBVcom_printf("a:\n x: %d\n y: %d\n z: %d\nw:\n x: %f\n y: %f\n z: %f\n",imu.ax,imu.ay,imu.az,imu.wx,imu.wy,imu.wz);
+			USBVcom_printf("a:\n x: %f\n y: %f\n z: %f\nw:\n x: %f\n y: %f\n z: %f\n",imu.ax,imu.ay,imu.az,imu.wx,imu.wy,imu.wz);
 		}
 	
 }
