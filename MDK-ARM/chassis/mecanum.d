@@ -1,4 +1,5 @@
-./chassis/mecanum.o: ..\Core\Src\mecanum.c ..\Core\Inc\encoder_control.h \
+./chassis/mecanum.o: ..\USER\Wheel\Src\mecanum.c \
+  ..\USER\Wheel\Inc\encoder_control.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h \
   ..\Core\Inc\stm32f4xx_hal_conf.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h \
@@ -35,4 +36,4 @@
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pcd.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pcd_ex.h \
-  ..\Core\Inc\mecanum.h
+  ..\USER\Wheel\Inc\mecanum.h

@@ -1,12 +1,12 @@
 #ifndef __IMU_H__
 #define __IMU_H__
-
+#include "mytype.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include "mytype.h"
+
 #define MPU_DELAY(x) HAL_Delay(x)
 
 typedef struct
@@ -49,6 +49,11 @@ typedef struct
 	float rol;
 	float pit;
 	float yaw;
+	float static_threschhold;
+  int static_period;
+	float gyroz_buf[100];//a queue with size 100 to store the recent 100 value of wz
+	float gyroz_mean;
+	float gyroz_std;
 } imu_t;
 
 extern mpu_data_t mpu_data;

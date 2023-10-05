@@ -1,4 +1,5 @@
-./chassis/imu.o: ..\Core\Src\imu.c ..\Core\Inc\imu.h ..\Core\Inc\mytype.h \
+./chassis/imu.o: ..\USER\IMU\Src\imu.c ..\USER\IMU\Inc\imu.h \
+  ..\USER\IMU\Inc\mytype.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h \
   ..\Core\Inc\stm32f4xx_hal_conf.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h \
@@ -40,4 +41,5 @@
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdlib.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\string.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\math.h \
-  ..\Core\Inc\mpu6500_reg.h ..\Core\Inc\spi.h ..\Core\Inc\main.h
+  ..\USER\IMU\Inc\mpu6500_reg.h ..\Core\Inc\spi.h ..\Core\Inc\main.h \
+  ..\USER\IMU\Inc\filters.h

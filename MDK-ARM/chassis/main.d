@@ -53,7 +53,8 @@
   ..\Middlewares\ST\STM32_USB_Device_Library\Core\Inc\usbd_ioreq.h \
   ..\Middlewares\ST\STM32_USB_Device_Library\Core\Inc\usbd_core.h \
   ..\Middlewares\ST\STM32_USB_Device_Library\Core\Inc\usbd_ctlreq.h \
-  ..\Core\Inc\encoder_control.h ..\Core\Inc\mecanum.h ..\Core\Inc\imu.h \
-  ..\Core\Inc\mytype.h C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdarg.h \
+  ..\USER\Wheel\Inc\encoder_control.h ..\USER\Wheel\Inc\mecanum.h \
+  ..\USER\IMU\Inc\imu.h ..\USER\IMU\Inc\mytype.h \
+  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdarg.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\libcxx\stdbool.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdbool.h

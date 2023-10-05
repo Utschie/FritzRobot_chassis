@@ -340,7 +340,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32F427xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32F4xx/Include;../Drivers/CMSIS/Include;../USB_DEVICE/App;../USB_DEVICE/Target;../Middlewares/ST/STM32_USB_Device_Library/Core/Inc;../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32F4xx/Include;../Drivers/CMSIS/Include;../USB_DEVICE/App;../USB_DEVICE/Target;../Middlewares/ST/STM32_USB_Device_Library/Core/Inc;../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc;..\USER\IMU\Inc;..\USER\Wheel\Inc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1477,12 +1477,12 @@
             <File>
               <FileName>encoder_control.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Core\Src\encoder_control.c</FilePath>
+              <FilePath>..\USER\Wheel\Src\encoder_control.c</FilePath>
             </File>
             <File>
               <FileName>mecanum.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Core\Src\mecanum.c</FilePath>
+              <FilePath>..\USER\Wheel\Src\mecanum.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1490,34 +1490,14 @@
           <GroupName>Application/User/IMU</GroupName>
           <Files>
             <File>
-              <FileName>imu.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Core\Inc\imu.h</FilePath>
-            </File>
-            <File>
               <FileName>imu.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Core\Src\imu.c</FilePath>
-            </File>
-            <File>
-              <FileName>mpu6500_reg.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Core\Inc\mpu6500_reg.h</FilePath>
-            </File>
-            <File>
-              <FileName>mytype.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Core\Inc\mytype.h</FilePath>
+              <FilePath>..\USER\IMU\Src\imu.c</FilePath>
             </File>
             <File>
               <FileName>filters.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Core\Src\filters.c</FilePath>
-            </File>
-            <File>
-              <FileName>filters.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Core\Inc\filters.h</FilePath>
+              <FilePath>..\USER\IMU\Src\filters.c</FilePath>
             </File>
           </Files>
         </Group>

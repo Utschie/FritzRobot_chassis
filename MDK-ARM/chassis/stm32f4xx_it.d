@@ -35,7 +35,7 @@
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pcd.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pcd_ex.h \
-  ..\Core\Inc\stm32f4xx_it.h ..\Core\Inc\encoder_control.h \
+  ..\Core\Inc\stm32f4xx_it.h ..\USER\Wheel\Inc\encoder_control.h \
   ..\USB_DEVICE\App\usbd_cdc_if.h \
   ..\Middlewares\ST\STM32_USB_Device_Library\Class\CDC\Inc\usbd_cdc.h \
   ..\Middlewares\ST\STM32_USB_Device_Library\Core\Inc\usbd_ioreq.h \
@@ -46,6 +46,7 @@
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\string.h \
   ..\Middlewares\ST\STM32_USB_Device_Library\Core\Inc\usbd_core.h \
   ..\Middlewares\ST\STM32_USB_Device_Library\Core\Inc\usbd_ctlreq.h \
-  ..\Core\Inc\mecanum.h ..\Core\Inc\imu.h ..\Core\Inc\mytype.h \
+  ..\USER\Wheel\Inc\mecanum.h ..\USER\IMU\Inc\imu.h \
+  ..\USER\IMU\Inc\mytype.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdarg.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdbool.h

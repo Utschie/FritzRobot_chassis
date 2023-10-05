@@ -1,5 +1,5 @@
-./chassis/encoder_control.o: ..\Core\Src\encoder_control.c \
-  ..\Core\Inc\encoder_control.h \
+./chassis/encoder_control.o: ..\USER\Wheel\Src\encoder_control.c \
+  ..\USER\Wheel\Inc\encoder_control.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h \
   ..\Core\Inc\stm32f4xx_hal_conf.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h \

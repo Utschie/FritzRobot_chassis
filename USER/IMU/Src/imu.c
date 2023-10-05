@@ -3,7 +3,7 @@
 #include <math.h>
 #include "mpu6500_reg.h"
 #include "spi.h"
-
+#include "filters.h"
 #define MPU_HSPI hspi5
 #define MPU_NSS_LOW HAL_GPIO_WritePin(GPIOF, GPIO_PIN_6, GPIO_PIN_RESET)
 #define MPU_NSS_HIGH HAL_GPIO_WritePin(GPIOF, GPIO_PIN_6, GPIO_PIN_SET)
@@ -21,7 +21,7 @@ uint8_t               mpu_buff[14];                          /* buffer to save i
 uint8_t               ist_buff[6];                           /* buffer to save IST8310 raw data */
 mpu_data_t            mpu_data;
 imu_t                 imu={0};
-
+extern int static_flag;
 /**
   * @brief  write a byte of data to specified register
   * @param  reg:  the address of register to be written
@@ -101,7 +101,6 @@ void mpu_get_data()
     mpu_data.gy = ((mpu_buff[10] << 8 | mpu_buff[11]) - mpu_data.gy_offset);
     mpu_data.gz = ((mpu_buff[12] << 8 | mpu_buff[13]) - mpu_data.gz_offset);
 	
-		//memcpy(&imu.ax, &mpu_data.ax, 6 * sizeof(int16_t));
 
 	  imu.ax   = mpu_data.ax / 8192.0; //因为量程是4g
     imu.ay   = mpu_data.ay / 8192.0; 
@@ -110,6 +109,12 @@ void mpu_get_data()
 	  imu.wx   = mpu_data.gx / (131.068f*57.29578f); //量程设置为250度每秒，量程越小精度越高
     imu.wy   = mpu_data.gy / (131.068f*57.29578f); 
     imu.wz   = mpu_data.gz / (131.068f*57.29578f);
+	  StaticFilter();
+		if (static_flag==1)
+		{
+			imu.wz=0.0;
+		}
+	  
 }
 
 
@@ -168,6 +173,8 @@ uint8_t mpu_device_init(void)
 	//mpu_set_accel_fsr(1);// 这两个函数好像不太好使
 
 	mpu_offset_call();
+	StaticFilter_Init();
+	
 	return 0;
 }
 
@@ -201,3 +208,5 @@ void mpu_offset_call(void)
 	mpu_data.gy_offset=mpu_data.gy_offset / 300;
 	mpu_data.gz_offset=mpu_data.gz_offset / 300;
 }
+
+
