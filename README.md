@@ -1,6 +1,8 @@
 # FritzRobot_firmware
 ### 2023-10-05 update
-added extended kalman filter to estimate oreientation.
+added extended kalman filter to estimate oreientation and output the acceleration, Angular velocity and quaternion through USBVcom. The data format is shown below.
+
+![avatar](./pictures/VCom_output.png)
 ### 2023-10-05 update
 added static filter to gyro's z-axis, if in 0.5s the std of z-axis<0, they imu.wz are set to 0.0, 
 ### 2023-10-03 update

@@ -72,6 +72,7 @@ extern TIM_HandleTypeDef htim7;
 extern UART_HandleTypeDef huart6;
 extern Wheel wheelRB,wheelLB,wheelRF,wheelLF;
 extern imu_t  imu;
+extern float q0, q1,q2,q3;
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -288,9 +289,9 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 			mpu_get_data();
 			ekf_step(0.005);
 			quaternion2euler();
-			USBVcom_printf("a:\n x: %f\n y: %f\n z: %f\nw:\n x: %f\n y: %f\n z: %f\n",imu.ax,imu.ay,imu.az,imu.wx,imu.wy,imu.wz);
+			USBVcom_printf("acc:\n x: %f\n y: %f\n z: %f\nomega:\n x: %f\n y: %f\n z: %f\nquaternioin:\n w: %f\n x:%f\n y: %f\n z: %f\n",imu.ax,imu.ay,imu.az,imu.wx,imu.wy,imu.wz,q0,q1,q2,q3);
+			//USBVcom_printf("quaternioin:\n %f, %f, %f, %f",q0,q1,q2,q3);
 		}
-	
 }
 
 /* USER CODE END 1 */
