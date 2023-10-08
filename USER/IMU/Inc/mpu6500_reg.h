@@ -1,7 +1,5 @@
 
-#ifdef __cplusplus
-}
-#endif
+
 
 #ifndef __6500_REG__
 #define __6500_REG__

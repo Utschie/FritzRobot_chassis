@@ -49,9 +49,6 @@ typedef struct
 	float rol;
 	float pit;
 	float yaw;
-	float static_threschhold;
-  int static_period;
-	float gyroz_buf[100];//a queue with size 100 to store the recent 100 value of wz
 	float gyroz_mean;
 	float gyroz_std;
 } imu_t;
@@ -62,7 +59,8 @@ extern imu_t      imu;
 uint8_t mpu_device_init(void);
 void mpu_get_data(void);
 void mpu_offset_call(void);	
-	
+void ekf_init();
+void ekf_runonce(float dt);
 	
 #ifdef __cplusplus
 }

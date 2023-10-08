@@ -8,11 +8,11 @@
 #define MPU_NSS_LOW HAL_GPIO_WritePin(GPIOF, GPIO_PIN_6, GPIO_PIN_RESET)
 #define MPU_NSS_HIGH HAL_GPIO_WritePin(GPIOF, GPIO_PIN_6, GPIO_PIN_SET)
 
-//volatile float        q0 = 1.0f;
-//volatile float        q1 = 0.0f;
-//volatile float        q2 = 0.0f;
-//volatile float        q3 = 0.0f;
-//volatile float        exInt, eyInt, ezInt;                   /* error integral */
+volatile float        q0 = 1.0f;
+volatile float        q1 = 0.0f;
+volatile float        q2 = 0.0f;
+volatile float        q3 = 0.0f;
+//EKF ekf(q0,q1,q2,q3);                /* init ekf */
 static volatile float gx, gy, gz, ax, ay, az;  
 //volatile uint32_t     last_update, now_update;               /* Sampling cycle count, ubit ms */
 static uint8_t        tx, rx;
@@ -114,9 +114,30 @@ void mpu_get_data()
 		{
 			imu.wz=0.0;
 		}
+		
 	  
 }
 
+/*
+void ekf_init()
+{
+	float ax = mpu_data.ax_offset*1.0;
+	float ay = mpu_data.ay_offset*1.0;
+	float az = mpu_data.az_offset*1.0;
+	ekf.setz(ax,ay,az);//设定初始重力位姿
+}
+
+void ekf_runonce(float dt)
+{
+	ekf.dt = dt;//给它dt
+	ekf.predict(imu.wx,imu.wy,imu.wz);
+	ekf.update();
+	q0 = ekf.state_vector(0);
+	q1 = ekf.state_vector(1);
+	q2 = ekf.state_vector(2);
+	q3 = ekf.state_vector(3);
+}
+*/
 
 /**
 	* @brief  set imu 6500 gyroscope measure range
@@ -174,7 +195,7 @@ uint8_t mpu_device_init(void)
 
 	mpu_offset_call();
 	StaticFilter_Init();
-	
+	//ekf_init();
 	return 0;
 }
 

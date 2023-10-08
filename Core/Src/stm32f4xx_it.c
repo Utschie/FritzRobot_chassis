@@ -26,6 +26,7 @@
 #include "usbd_cdc_if.h"
 #include "mecanum.h"
 #include "imu.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -285,6 +286,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		else if (htim == (&htim7))
 		{
 			mpu_get_data();
+			//ekf_runonce(0.005);
 			USBVcom_printf("a:\n x: %f\n y: %f\n z: %f\nw:\n x: %f\n y: %f\n z: %f\n",imu.ax,imu.ay,imu.az,imu.wx,imu.wy,imu.wz);
 		}
 	
