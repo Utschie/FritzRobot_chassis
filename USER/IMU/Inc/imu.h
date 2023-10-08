@@ -60,8 +60,8 @@ uint8_t mpu_device_init(void);
 void mpu_get_data(void);
 void mpu_offset_call(void);	
 void ekf_init();
-void ekf_runonce(float dt);
-	
+void ekf_step(float dt);
+void quaternion2euler(void);
 #ifdef __cplusplus
 }
 #endif

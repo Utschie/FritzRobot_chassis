@@ -4,6 +4,7 @@
 #include "mpu6500_reg.h"
 #include "spi.h"
 #include "filters.h"
+#include "ekf.h"
 #define MPU_HSPI hspi5
 #define MPU_NSS_LOW HAL_GPIO_WritePin(GPIOF, GPIO_PIN_6, GPIO_PIN_RESET)
 #define MPU_NSS_HIGH HAL_GPIO_WritePin(GPIOF, GPIO_PIN_6, GPIO_PIN_SET)
@@ -12,7 +13,7 @@ volatile float        q0 = 1.0f;
 volatile float        q1 = 0.0f;
 volatile float        q2 = 0.0f;
 volatile float        q3 = 0.0f;
-//EKF ekf(q0,q1,q2,q3);                /* init ekf */
+EKF ekf(q0,q1,q2,q3);                /* init ekf */
 static volatile float gx, gy, gz, ax, ay, az;  
 //volatile uint32_t     last_update, now_update;               /* Sampling cycle count, ubit ms */
 static uint8_t        tx, rx;
@@ -118,7 +119,7 @@ void mpu_get_data()
 	  
 }
 
-/*
+
 void ekf_init()
 {
 	float ax = mpu_data.ax_offset*1.0;
@@ -127,7 +128,7 @@ void ekf_init()
 	ekf.setz(ax,ay,az);//设定初始重力位姿
 }
 
-void ekf_runonce(float dt)
+void ekf_step(float dt)
 {
 	ekf.dt = dt;//给它dt
 	ekf.predict(imu.wx,imu.wy,imu.wz);
@@ -137,7 +138,7 @@ void ekf_runonce(float dt)
 	q2 = ekf.state_vector(2);
 	q3 = ekf.state_vector(3);
 }
-*/
+
 
 /**
 	* @brief  set imu 6500 gyroscope measure range
@@ -195,7 +196,7 @@ uint8_t mpu_device_init(void)
 
 	mpu_offset_call();
 	StaticFilter_Init();
-	//ekf_init();
+	ekf_init();
 	return 0;
 }
 
@@ -230,4 +231,13 @@ void mpu_offset_call(void)
 	mpu_data.gz_offset=mpu_data.gz_offset / 300;
 }
 
+void quaternion2euler(void)
+{
+	/* yaw     */
+	imu.yaw = atan2(2*q1*q2 + 2*q0*q3, -2*q2*q2 - 2*q3*q3 + 1)* 57.3; 
+	/* pitch   */
+	imu.pit = asin(-2*q1*q3 + 2*q0*q2)* 57.3;   
+	/* roll     */	
+	imu.rol =  atan2(2*q2*q3 + 2*q0*q1, -2*q1*q1 - 2*q2*q2 + 1)* 57.3;
+}
 

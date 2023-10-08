@@ -1,5 +1,7 @@
 # FritzRobot_firmware
 ### 2023-10-05 update
+added extended kalman filter to estimate oreientation.
+### 2023-10-05 update
 added static filter to gyro's z-axis, if in 0.5s the std of z-axis<0, they imu.wz are set to 0.0, 
 ### 2023-10-03 update
 IMU raw data sent out. The sampling rate of gyro and accel is 200hz, the DLPF for gyro and accel are both set to 92hz, the range of gyro is 250 dps, and accel is 4g.
