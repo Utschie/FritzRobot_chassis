@@ -395,9 +395,9 @@
           <GroupName>Application/User/Core</GroupName>
           <Files>
             <File>
-              <FileName>main.cpp</FileName>
+              <FileName>main.c</FileName>
               <FileType>1</FileType>
-              <FilePath>../Core/Src/main.cpp</FilePath>
+              <FilePath>..\Core\Src\main.c</FilePath>
             </File>
             <File>
               <FileName>gpio.c</FileName>
