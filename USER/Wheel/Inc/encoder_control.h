@@ -13,7 +13,8 @@ typedef struct _Wheel
 	TIM_HandleTypeDef* PwmTim;//TIM for pwm output
 	uint32_t PwmChannel;//
 	TIM_HandleTypeDef* EncoderTim;//Tim for encoder
-	GPIO_TypeDef* IN_GPIO_Port;
+	GPIO_TypeDef* IN1_GPIO_Port;
+	GPIO_TypeDef* IN2_GPIO_Port;
 	uint16_t      IN1;
 	uint16_t      IN2;
 	int nErrorPrev;//上一次偏差值

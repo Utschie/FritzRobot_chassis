@@ -12,10 +12,11 @@ Wheel wheelRB,wheelLB,wheelRF,wheelLF;//define right behind wheel, left behind w
 void WheelsInit(void)//the global variable can only defined outside a fuction. It can't be assigned outside a function, so it needs a init function.
 {
 	wheelRB.nEncoderTarget=0;
-	wheelRB.EncoderTim = &htim2;
+	wheelRB.EncoderTim = &htim1;
 	wheelRB.PwmTim= &htim9;
 	wheelRB.PwmChannel=TIM_CHANNEL_1;
-	wheelRB.IN_GPIO_Port=GPIOF;
+	wheelRB.IN1_GPIO_Port=GPIOF;
+	wheelRB.IN2_GPIO_Port=GPIOF;
 	wheelRB.IN1=GPIO_PIN_1;
 	wheelRB.IN2=GPIO_PIN_0;
 	wheelRB.fSpeedTarget=0.0;
@@ -25,8 +26,9 @@ void WheelsInit(void)//the global variable can only defined outside a fuction. I
 	wheelLB.EncoderTim = &htim8;
 	wheelLB.PwmTim= &htim9;
 	wheelLB.PwmChannel=TIM_CHANNEL_2;
-	wheelLB.IN_GPIO_Port=GPIOC;
-	wheelLB.IN1=GPIO_PIN_4;
+	wheelLB.IN1_GPIO_Port=GPIOF;
+	wheelLB.IN2_GPIO_Port=GPIOC;
+	wheelLB.IN1=GPIO_PIN_10;
 	wheelLB.IN2=GPIO_PIN_0;
 	wheelLB.fSpeedTarget=0.0;
 	wheelLB.nEncoderTarget=0;
@@ -35,7 +37,8 @@ void WheelsInit(void)//the global variable can only defined outside a fuction. I
 	wheelRF.EncoderTim = &htim5;
 	wheelRF.PwmTim= &htim3;
 	wheelRF.PwmChannel=TIM_CHANNEL_3;
-	wheelRF.IN_GPIO_Port=GPIOA;
+	wheelRF.IN1_GPIO_Port=GPIOA;
+	wheelRF.IN2_GPIO_Port=GPIOA;
 	wheelRF.IN1=GPIO_PIN_5;
 	wheelRF.IN2=GPIO_PIN_4;
 	wheelRF.fSpeedTarget=0.0;
@@ -45,9 +48,10 @@ void WheelsInit(void)//the global variable can only defined outside a fuction. I
 	wheelLF.EncoderTim = &htim4;
 	wheelLF.PwmTim= &htim3;
 	wheelLF.PwmChannel=TIM_CHANNEL_4;
-	wheelLF.IN_GPIO_Port=GPIOC;
-	wheelLF.IN1=GPIO_PIN_5;
-	wheelLF.IN2=GPIO_PIN_1;
+	wheelLF.IN1_GPIO_Port=GPIOI;
+	wheelLF.IN2_GPIO_Port=GPIOC;
+	wheelLF.IN1=GPIO_PIN_9;
+	wheelLF.IN2=GPIO_PIN_3;
 	wheelLF.fSpeedTarget=0.0;
 	wheelLF.nEncoderTarget=0;
 	
@@ -97,13 +101,13 @@ void SpeedInnerControl(Wheel* wheel)//速度内环控制
 	//Set pwm and direction
 		if((*wheel).nPwm < 0)//reverse rotation
         {
-            HAL_GPIO_WritePin((*wheel).IN_GPIO_Port, (*wheel).IN2, GPIO_PIN_SET);//AIN2,high
-            HAL_GPIO_WritePin((*wheel).IN_GPIO_Port, (*wheel).IN1, GPIO_PIN_RESET);//AIN1,low
+            HAL_GPIO_WritePin((*wheel).IN2_GPIO_Port, (*wheel).IN2, GPIO_PIN_SET);//AIN2,high
+            HAL_GPIO_WritePin((*wheel).IN1_GPIO_Port, (*wheel).IN1, GPIO_PIN_RESET);//AIN1,low
             __HAL_TIM_SET_COMPARE((*wheel).PwmTim, (*wheel).PwmChannel, -(*wheel).nPwm);//set pwm
         }else
         {//forward rotation
-            HAL_GPIO_WritePin((*wheel).IN_GPIO_Port,(*wheel).IN1, GPIO_PIN_SET);//AIN1,high
-            HAL_GPIO_WritePin((*wheel).IN_GPIO_Port, (*wheel).IN2, GPIO_PIN_RESET);//AIN2,low
+            HAL_GPIO_WritePin((*wheel).IN1_GPIO_Port,(*wheel).IN1, GPIO_PIN_SET);//AIN1,high
+            HAL_GPIO_WritePin((*wheel).IN2_GPIO_Port, (*wheel).IN2, GPIO_PIN_RESET);//AIN2,low
             __HAL_TIM_SET_COMPARE((*wheel).PwmTim,(*wheel).PwmChannel, (*wheel).nPwm);
         }			
 
@@ -116,8 +120,8 @@ void WheelControlCallback(Wheel* wheel)//This function is used in HAL_TIM_Period
 	
 	if ((*wheel).fSpeedTarget==0.0)//control left behind wheel
 	{
-		HAL_GPIO_WritePin((*wheel).IN_GPIO_Port, (*wheel).IN1, GPIO_PIN_RESET);//全都调成低电平,即关闭电机
-		HAL_GPIO_WritePin((*wheel).IN_GPIO_Port, (*wheel).IN2, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin((*wheel).IN1_GPIO_Port, (*wheel).IN1, GPIO_PIN_RESET);//全都调成低电平,即关闭电机
+		HAL_GPIO_WritePin((*wheel).IN2_GPIO_Port, (*wheel).IN2, GPIO_PIN_RESET);
 		(*wheel).fSpeedTarget = 0.0;
 		(*wheel).nEncoderTarget=Speed2Pulse((*wheel).fSpeedTarget);
 		(*wheel).nEncoderPulse = GetEncoderPulse(wheel);

@@ -1,4 +1,6 @@
 # FritzRobot_firmware
+### 2023-10-12 update
+re-distribute the  GPIO pins and TIM to release the Ethernet peripheral's pins  
 ### 2023-10-08 update
 added extended kalman filter to estimate oreientation and output the acceleration, Angular velocity and quaternion through USBVcom. The data format is shown below.
 
