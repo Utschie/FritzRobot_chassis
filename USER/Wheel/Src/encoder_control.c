@@ -5,7 +5,7 @@
 const float fRadius=0.0375;//unit [m], wheel's radius 
 const float fSp=0.005;//unit [s],sampling period
 const float pi=3.1415926f;
-int nPpr=1560;//Number of Pulse per round of motor,四倍频所以1560
+int nPpr=60000;//Number of Pulse per round of motor,四倍频所以13*30*4=1560，gmr编码器则为500*30*4=60000;
 float fKp = 45.0;
 float fKi = 3.0;//比例参数和积分参数
 Wheel wheelRB,wheelLB,wheelRF,wheelLF;//define right behind wheel, left behind wheel, right front wheel, left front wheel

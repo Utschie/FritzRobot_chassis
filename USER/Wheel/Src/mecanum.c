@@ -1,7 +1,7 @@
 #include "encoder_control.h"//需要先include这个，后include mecanum.h,否则会找不到Wheel类型
 #include "mecanum.h"
 const float rx = 0.085;//unit [m]
-const float ry = 0.096;//unit [m]
+const float ry = 0.12;//unit [m],0.12是大扭矩电机的ry，0.096是小扭矩电机的ry
 float CarSpeedTarget[3] = {0.0, 0.0, 0.0};
 float CarSpeedActual[3]={0.0, 0.0, 0.0};
 extern Wheel wheelRB,wheelLB,wheelRF,wheelLF;
