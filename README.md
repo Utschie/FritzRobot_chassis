@@ -1,6 +1,7 @@
 # FritzRobot_firmware
 ### 2023-10-14 update
 switched to larger moment motor and accurater GMR encoder, therefore changed the value of ry (wheelbase) and nPpr(pulse per round).
+![avatar](./pictures/longer%20wheelbase.jpg)
 ### 2023-10-12 update
 re-distribute the  GPIO pins and TIM to release the Ethernet peripheral's pins  
 ### 2023-10-08 update
