@@ -1,4 +1,6 @@
 # FritzRobot_firmware
+### 2023-10-16 update
+re-tune the pid parameters since the accurater encoder, the new parameters: Kp=1.17,Ki=0.103
 ### 2023-10-14 update
 switched to larger moment motor and accurater GMR encoder, therefore changed the value of ry (wheelbase) and nPpr(pulse per round).
 ![avatar](./pictures/chassis.jpg)
