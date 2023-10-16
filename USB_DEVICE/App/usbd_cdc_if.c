@@ -116,7 +116,6 @@ extern USBD_HandleTypeDef hUsbDeviceFS;
 /* USER CODE BEGIN EXPORTED_VARIABLES */
 extern Wheel wheelRB,wheelLB,wheelRF,wheelLF;
 extern float CarSpeedTarget[3];
-//extern float fKp,fKi;
 /* USER CODE END EXPORTED_VARIABLES */
 
 /**
