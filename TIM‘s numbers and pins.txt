@@ -13,7 +13,8 @@ E-H  TIM4-Wheel_LF(PD12,PD13)
      TIM1-Wheel_LB(PA8,PA9)
 W-Z  TIM8-Wheel_LB
 
-S-V  TIM2-ETH
+S-V  TIM2-ETH（但是ETH_TX_EN是在PB11和PG11引脚，但是大疆开发板没放出来）
+SPI1 （PA4，PA5，PA6，PA7，其中PA4和PA5被占用作RF轮的IO了，不过既然ETH无所谓了，那N1,L1,O1,O2还可以继续用）
 蜂鸣器和同步信号   TIM12
 
 未激活定时器：TIM6, TIM7, TIM10, TIM11, TIM13, TIM14，其中6和7是基本定时器，不含pwm功能，10，11，13，14只有一个通道，可以输出pwm
