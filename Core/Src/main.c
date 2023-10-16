@@ -97,12 +97,12 @@ int main(void)
   MX_TIM6_Init();
   MX_TIM8_Init();
   MX_USB_DEVICE_Init();
-	MX_TIM1_Init();
   MX_TIM4_Init();
   MX_TIM5_Init();
   MX_TIM3_Init();
   MX_SPI5_Init();
   MX_TIM7_Init();
+  MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
 	HAL_TIM_Encoder_Start(&htim1, TIM_CHANNEL_ALL);//RB Wheel Encoder
 	HAL_TIM_Encoder_Start(&htim4, TIM_CHANNEL_ALL);//LF Wheel Encoder
