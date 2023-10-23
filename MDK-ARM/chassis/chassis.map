@@ -7056,12 +7056,12 @@ Image Symbol Table
     tenpwrs_x                                0x0800b1e8   Data          60  bigflt0.o(.constdata)
     .constdata                               0x0800b1e8   Section      148  bigflt0.o(.constdata)
     tenpwrs_i                                0x0800b224   Data          64  bigflt0.o(.constdata)
-    .L.str                                   0x0800b28c   Data          95  stm32f4xx_it.o(.rodata.str1.1)
+    .L.str                                   0x0800b28c   Data          94  stm32f4xx_it.o(.rodata.str1.1)
     [Anonymous Symbol]                       0x0800b28c   Section        0  stm32f4xx_it.o(.rodata.str1.1)
-    .L.str.4                                 0x0800b2eb   Data           2  usbd_cdc_if.o(.rodata.str1.1)
-    [Anonymous Symbol]                       0x0800b2eb   Section        0  usbd_cdc_if.o(.rodata.str1.1)
-    .L.str.24                                0x0800b2ed   Data         167  ekf.o(.rodata.str1.1)
-    [Anonymous Symbol]                       0x0800b2ed   Section        0  ekf.o(.rodata.str1.1)
+    .L.str.4                                 0x0800b2ea   Data           2  usbd_cdc_if.o(.rodata.str1.1)
+    [Anonymous Symbol]                       0x0800b2ea   Section        0  usbd_cdc_if.o(.rodata.str1.1)
+    .L.str.24                                0x0800b2ec   Data         167  ekf.o(.rodata.str1.1)
+    [Anonymous Symbol]                       0x0800b2ec   Section        0  ekf.o(.rodata.str1.1)
     c$$dinf                                  0x0800b3b4   Section        8  fpconst.o(c$$dinf)
     c$$dmax                                  0x0800b3bc   Section        8  fpconst.o(c$$dmax)
     locale$$data                             0x0800b3c4   Section       28  lc_numeric_c.o(locale$$data)
@@ -8290,9 +8290,10 @@ Memory Map of the image
     0x0800b1e7   0x0800b1e7   0x00000001   PAD
     0x0800b1e8   0x0800b1e8   0x00000094   Data   RO         3821    .constdata          c_w.l(bigflt0.o)
     0x0800b27c   0x0800b27c   0x00000010   Data   RO         1180    .rodata.AHBPrescTable  system_stm32f4xx.o
-    0x0800b28c   0x0800b28c   0x0000005f   Data   RO          121    .rodata.str1.1      stm32f4xx_it.o
-    0x0800b2eb   0x0800b2eb   0x00000002   Data   RO         1243    .rodata.str1.1      usbd_cdc_if.o
-    0x0800b2ed   0x0800b2ed   0x000000a7   Data   RO         1591    .rodata.str1.1      ekf.o
+    0x0800b28c   0x0800b28c   0x0000005e   Data   RO          121    .rodata.str1.1      stm32f4xx_it.o
+    0x0800b2ea   0x0800b2ea   0x00000002   Data   RO         1243    .rodata.str1.1      usbd_cdc_if.o
+    0x0800b2ec   0x0800b2ec   0x000000a7   Data   RO         1591    .rodata.str1.1      ekf.o
+    0x0800b393   0x0800b393   0x00000001   PAD
     0x0800b394   0x0800b394   0x00000020   Data   RO         3988    Region$$Table       anon$$obj.o
     0x0800b3b4   0x0800b3b4   0x00000008   Data   RO         3897    c$$dinf             fz_wm.l(fpconst.o)
     0x0800b3bc   0x0800b3bc   0x00000008   Data   RO         3900    c$$dmax             fz_wm.l(fpconst.o)
@@ -8399,7 +8400,7 @@ Image component sizes
        982          0          0          0          0      24746   stm32f4xx_hal_spi.o
       2174          4          0          0          0      54464   stm32f4xx_hal_tim.o
        182          0          0          0          0      21131   stm32f4xx_hal_tim_ex.o
-       368          4         95          0          0       7256   stm32f4xx_it.o
+       368          4         94          0          0       7256   stm32f4xx_it.o
       4238          0          0          0          0      30579   stm32f4xx_ll_usb.o
         18          0         16          4          0       2697   system_stm32f4xx.o
       1702          0          0          0        576      11588   tim.o
@@ -8415,7 +8416,7 @@ Image component sizes
     ----------------------------------------------------------------------
      30204        380        744        276       9968    4766034   Object Totals
          0          0         32          0          0          0   (incl. Generated)
-       226          4          0          8         13          0   (incl. Padding)
+       226          4          1          8         13          0   (incl. Padding)
 
     ----------------------------------------------------------------------
 
