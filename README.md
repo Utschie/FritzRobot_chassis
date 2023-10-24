@@ -1,4 +1,7 @@
 # FritzRobot_firmware
+### 2023-10-25 update
+Fixed the number of bits and format of the USBVCom's output to make it easier to read in the host computer via the serial driver. And added the speed of each wheel and the overall speed of the body.
+![avatar](./pictures/Vcom_output2.png)
 ### 2023-10-16 update
 re-tune the pid parameters since the accurater encoder, the new parameters: Kp=1.17,Ki=0.103
 ### 2023-10-14 update
@@ -7,9 +10,7 @@ switched to larger moment motor and accurater GMR encoder, therefore changed the
 ### 2023-10-12 update
 re-distribute the  GPIO pins and TIM to release the Ethernet peripheral's pins  
 ### 2023-10-08 update
-added extended kalman filter to estimate oreientation and output the acceleration, Angular velocity and quaternion through USBVcom. The data format is shown below.
-
-![avatar](./pictures/VCom_output.png)
+added extended kalman filter to estimate oreientation and output the acceleration, Angular velocity and quaternion through USBVcom. 
 ### 2023-10-05 update
 added static filter to gyro's z-axis, if in 0.5s the std of z-axis<0, they imu.wz are set to 0.0, 
 ### 2023-10-03 update

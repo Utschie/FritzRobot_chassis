@@ -5,8 +5,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-extern float CarSpeedTarget[3];
-extern float CarSpeedActual[3];
+//float CarSpeedTarget[3];
+//float CarSpeedActual[3];
 void Speed2Wheels(float Vx, float Vy, float omega_z);
 void Wheels2Speed(float* output);
 #ifdef __cplusplus

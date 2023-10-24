@@ -71,6 +71,7 @@ extern TIM_HandleTypeDef htim7;
 extern Wheel wheelRB,wheelLB,wheelRF,wheelLF;
 extern imu_t  imu;
 extern float q0, q1,q2,q3;
+extern float CarSpeedActual[3];
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -271,7 +272,31 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 			mpu_get_data();
 			ekf_step(0.005);
 			quaternion2euler();
-			USBVcom_printf("acc:\n x: %f\n y: %f\n z: %f\nomega:\n x: %f\n y: %f\n z: %f\nquaternion:\n w: %f\n x:%f\n y: %f\n z: %f\n",imu.ax,imu.ay,imu.az,imu.wx,imu.wy,imu.wz,q0,q1,q2,q3);
+			USBVcom_printf("acc:\n"
+			               "x: %9f\n"
+			               "y: %9f\n"
+			               "z: %9f\n"
+			               "omega:\n"
+			               "x: %9f\n"
+			               "y: %9f\n"
+			               "z: %9f\n"
+			               "quaternion:\n"
+			               "w: %9f\n"
+			               "x: %9f\n"
+			               "y: %9f\n"
+			               "z: %9f\n"
+			               "wheelspeed:\n"
+			               "LF: %9f\n"
+			               "RF: %9f\n"
+			               "LB: %9f\n"
+			               "RB: %9f\n"
+										 "V:\n"
+										 "Vx: %9f\n"
+										 "Vy: %9f\n"
+										 "Vz: %9f\n",imu.ax,imu.ay,imu.az,imu.wx,imu.wy,imu.wz,\
+			                           q0,q1,q2,q3,\
+			                            wheelLF.fSpeedActual,wheelRF.fSpeedActual,wheelRF.fSpeedActual,wheelRB.fSpeedActual,\
+																	CarSpeedActual[0],CarSpeedActual[1],CarSpeedActual[2]);
 			//USBVcom_printf("quaternioin:\n %f, %f, %f, %f",q0,q1,q2,q3);
 		}
 }
