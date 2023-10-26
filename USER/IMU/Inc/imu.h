@@ -51,6 +51,10 @@ typedef struct
 	float yaw;
 	float gyroz_mean;
 	float gyroz_std;
+	float gyrox_mean;
+	float gyrox_std;
+	float gyroy_mean;
+	float gyroy_std;
 } imu_t;
 
 extern mpu_data_t mpu_data;

@@ -22,7 +22,7 @@ uint8_t               mpu_buff[14];                          /* buffer to save i
 uint8_t               ist_buff[6];                           /* buffer to save IST8310 raw data */
 mpu_data_t            mpu_data;
 imu_t                 imu={0};
-extern int static_flag;
+extern int static_flag_x,static_flag_y,static_flag_z;
 /**
   * @brief  write a byte of data to specified register
   * @param  reg:  the address of register to be written
@@ -90,7 +90,7 @@ uint8_t mpu_read_bytes(uint8_t const regAddr, uint8_t* pData, uint8_t len)//CÓïÑ
 	* @retval 
   * @usage  call in main() function
 	*/
-void mpu_get_data()
+void mpu_get_data()//°ÑÍ¨¹ıspi¶ÁÈ¡Êı¾İµ½imuÀï
 {
 	  mpu_read_bytes(MPU6500_ACCEL_XOUT_H, mpu_buff, 14);//´Ó¼Ä´æÆ÷µØÖ·MPU6500_ACCEL_XOUT_Hµ½MPU6500_GYRO_ZOUT_L£¬ÊÇ¸ÕºÃÁ¬ĞøµÄ14¸ö×Ö½Ú¡£Êı¾İÊÇ°´×ÅµØÖ·Á¬ĞøÅÅÁĞµÄ£¬¸æËßspiÄ³¸öµØÖ·£¬ÆäÊµ¾ÍÊÇÔÚ¸æËßËü´ÓÄÄ¸öµØÖ·¿ªÊ¼ÍùÏÂ¶Á
 
@@ -110,12 +110,21 @@ void mpu_get_data()
 	  imu.wx   = mpu_data.gx / (131.068f*57.29578f); //Á¿³ÌÉèÖÃÎª250¶ÈÃ¿Ãë£¬Á¿³ÌÔ½Ğ¡¾«¶ÈÔ½¸ß
     imu.wy   = mpu_data.gy / (131.068f*57.29578f); 
     imu.wz   = mpu_data.gz / (131.068f*57.29578f);
-	  StaticFilter();
-		if (static_flag==1)
+	  StaticFilter_x();//È¡³öÔ­Ê¼Êı¾İ¼ÆËã¾²Ö¹Ìõ¼ş
+	  StaticFilter_y();
+	  StaticFilter_z();
+		if (static_flag_z==1)//Ë­¾²Ö¹¾Í¸øË­¸³0
 		{
 			imu.wz=0.0;
 		}
-		
+		if (static_flag_x==1)
+		{
+			imu.wx=0.0;
+		}
+		if (static_flag_y==1)
+		{
+			imu.wy=0.0;
+		}
 	  
 }
 

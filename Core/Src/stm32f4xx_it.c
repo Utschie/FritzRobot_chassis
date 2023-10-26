@@ -72,6 +72,7 @@ extern Wheel wheelRB,wheelLB,wheelRF,wheelLF;
 extern imu_t  imu;
 extern float q0, q1,q2,q3;
 extern float CarSpeedActual[3];
+extern int static_flag_x,static_flag_y,static_flag_z;
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -269,8 +270,11 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     }
 		else if (htim == (&htim7))
 		{
-			mpu_get_data();
-			ekf_step(0.005);
+			mpu_get_data();//内部已经经过滤波
+			if (!(static_flag_x==1 && static_flag_y==1 && static_flag_z==1))//如果不同时静止
+			{
+				ekf_step(0.005);
+			}
 			quaternion2euler();
 			USBVcom_printf("acc:\n"
 			               "x: %9f\n"

@@ -1,4 +1,6 @@
 # FritzRobot_firmware
+### 2023-10-26 update
+add static filter to gyro's x and y axis and raised the threshold to 0.003. If the threshold value smaller than 0.003, there would be long-term shift on gyroscope when the chassis is static.
 ### 2023-10-25 update
 Fixed the number of bits and format of the USBVCom's output to make it easier to read in the host computer via the serial driver. And added the speed of each wheel and the overall speed of the body.
 ![avatar](./pictures/Vcom_output2.png)
