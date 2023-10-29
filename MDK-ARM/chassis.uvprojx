@@ -1480,19 +1480,14 @@
           <GroupName>Application/User/IMU</GroupName>
           <Files>
             <File>
-              <FileName>imu.c</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\USER\IMU\Src\imu.c</FilePath>
-            </File>
-            <File>
               <FileName>filters.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\USER\IMU\Src\filters.c</FilePath>
             </File>
             <File>
-              <FileName>ekf.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\USER\IMU\Src\ekf.cpp</FilePath>
+              <FileName>imu.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USER\IMU\Src\imu.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -21,13 +21,13 @@ typedef struct
 	int16_t gy;
 	int16_t gz;
 	
-	int16_t ax_offset;
-	int16_t ay_offset;
-	int16_t az_offset;
+	float ax_offset;//”√float±Ì æ
+  float ay_offset;
+	float az_offset;
 
-	int16_t gx_offset;
-	int16_t gy_offset;
-	int16_t gz_offset;
+	float gx_offset;
+	float gy_offset;
+	float gz_offset;
 } mpu_data_t;
 
 typedef struct
@@ -57,14 +57,12 @@ typedef struct
 	float gyroy_std;
 } imu_t;
 
-extern mpu_data_t mpu_data;
-extern imu_t      imu;
+//extern mpu_data_t mpu_data;
+//extern imu_t      imu;
 
 uint8_t mpu_device_init(void);
 void mpu_get_data(void);
 void mpu_offset_call(void);	
-void ekf_init();
-void ekf_step(float dt);
 void quaternion2euler(void);
 #ifdef __cplusplus
 }

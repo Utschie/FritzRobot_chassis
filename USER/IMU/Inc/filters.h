@@ -1,6 +1,6 @@
 #ifndef __FILTERS_H__
 #define __FILTERS_H__
-#define STATIC_THRESHHOLD 0.003//最小也得为0.003，否则会漂
+#define STATIC_THRESHHOLD 0.001//最小也得为0.003·，否则会漂
 #define STATIC_PERIOD 500//unit [ms]
 
 #ifdef __cplusplus

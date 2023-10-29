@@ -4,7 +4,6 @@
 #include "mpu6500_reg.h"
 #include "spi.h"
 #include "filters.h"
-#include "ekf.h"
 #define MPU_HSPI hspi5
 #define MPU_NSS_LOW HAL_GPIO_WritePin(GPIOF, GPIO_PIN_6, GPIO_PIN_RESET)
 #define MPU_NSS_HIGH HAL_GPIO_WritePin(GPIOF, GPIO_PIN_6, GPIO_PIN_SET)
@@ -12,8 +11,7 @@
 volatile float        q0 = 1.0f;
 volatile float        q1 = 0.0f;
 volatile float        q2 = 0.0f;
-volatile float        q3 = 0.0f;
-EKF ekf(q0,q1,q2,q3);                /* init ekf */
+volatile float        q3 = 0.0f;             /* init ekf */
 static volatile float gx, gy, gz, ax, ay, az;  
 //volatile uint32_t     last_update, now_update;               /* Sampling cycle count, ubit ms */
 static uint8_t        tx, rx;
@@ -98,25 +96,26 @@ void mpu_get_data()//把通过spi读取数据到imu里
     mpu_data.ay   = mpu_buff[2] << 8 | mpu_buff[3];
     mpu_data.az   = mpu_buff[4] << 8 | mpu_buff[5];
 
-		mpu_data.gx = ((mpu_buff[8]  << 8 | mpu_buff[9])  - mpu_data.gx_offset);
-    mpu_data.gy = ((mpu_buff[10] << 8 | mpu_buff[11]) - mpu_data.gy_offset);
-    mpu_data.gz = ((mpu_buff[12] << 8 | mpu_buff[13]) - mpu_data.gz_offset);
+		mpu_data.gx = mpu_buff[8]  << 8 | mpu_buff[9];
+    mpu_data.gy = mpu_buff[10] << 8 | mpu_buff[11];
+    mpu_data.gz = mpu_buff[12] << 8 | mpu_buff[13];
 	
 
-	  imu.ax   = mpu_data.ax / 8192.0; //因为量程是4g
-    imu.ay   = mpu_data.ay / 8192.0; 
-    imu.az   = mpu_data.az / 8192.0;
+	  imu.ax   = mpu_data.ax / 8191.75; //因为量程是4g
+    imu.ay   = mpu_data.ay / 8191.75; 
+    imu.az   = mpu_data.az / 8191.75;
 	
-	  imu.wx   = mpu_data.gx / (131.068f*57.29578f); //量程设置为250度每秒，量程越小精度越高
-    imu.wy   = mpu_data.gy / (131.068f*57.29578f); 
-    imu.wz   = mpu_data.gz / (131.068f*57.29578f);
-	  StaticFilter_x();//取出原始数据计算静止条件
-	  StaticFilter_y();
+	  imu.wx   = mpu_data.gx / (131.068f*57.29578f)- mpu_data.gx_offset; //量程设置为250度每秒，量程越小精度越高
+    imu.wy   = mpu_data.gy / (131.068f*57.29578f)- mpu_data.gy_offset; 
+    imu.wz   = mpu_data.gz / (131.068f*57.29578f)- mpu_data.gz_offset;
+	  //StaticFilter_x();//取出原始数据计算静止条件
+	  //StaticFilter_y();
 	  StaticFilter_z();
 		if (static_flag_z==1)//谁静止就给谁赋0
 		{
 			imu.wz=0.0;
 		}
+		/*
 		if (static_flag_x==1)
 		{
 			imu.wx=0.0;
@@ -125,28 +124,11 @@ void mpu_get_data()//把通过spi读取数据到imu里
 		{
 			imu.wy=0.0;
 		}
+		*/
+		
 	  
 }
 
-
-void ekf_init()
-{
-	float ax = mpu_data.ax_offset*1.0;
-	float ay = mpu_data.ay_offset*1.0;
-	float az = mpu_data.az_offset*1.0;
-	ekf.setz(ax,ay,az);//设定初始重力位姿
-}
-
-void ekf_step(float dt)
-{
-	ekf.dt = dt;//给它dt
-	ekf.predict(imu.wx,imu.wy,imu.wz);
-	ekf.update();
-	q0 = ekf.state_vector(0);
-	q1 = ekf.state_vector(1);
-	q2 = ekf.state_vector(2);
-	q3 = ekf.state_vector(3);
-}
 
 
 /**
@@ -205,7 +187,6 @@ uint8_t mpu_device_init(void)
 
 	mpu_offset_call();
 	StaticFilter_Init();
-	ekf_init();
 	return 0;
 }
 
@@ -218,17 +199,26 @@ uint8_t mpu_device_init(void)
 void mpu_offset_call(void)
 {
 	int i;
+	float ax_sum;
+	float ay_sum;
+	float az_sum;
 	for (i=0; i<300;i++)
 	{
 		mpu_read_bytes(MPU6500_ACCEL_XOUT_H, mpu_buff, 14);//这里其实就是把静止情况下的设为offset
 
-		mpu_data.ax_offset += mpu_buff[0] << 8 | mpu_buff[1];
-		mpu_data.ay_offset += mpu_buff[2] << 8 | mpu_buff[3];
-		mpu_data.az_offset += mpu_buff[4] << 8 | mpu_buff[5];
-	
-		mpu_data.gx_offset += mpu_buff[8]  << 8 | mpu_buff[9];
-		mpu_data.gy_offset += mpu_buff[10] << 8 | mpu_buff[11];
-		mpu_data.gz_offset += mpu_buff[12] << 8 | mpu_buff[13];
+		mpu_data.ax   = mpu_buff[0] << 8 | mpu_buff[1];
+    mpu_data.ay   = mpu_buff[2] << 8 | mpu_buff[3];
+    mpu_data.az   = mpu_buff[4] << 8 | mpu_buff[5];
+		mpu_data.ax_offset+= mpu_data.ax / 8191.75;
+	  mpu_data.ay_offset+= mpu_data.ay / 8191.75;
+		mpu_data.az_offset+= mpu_data.az / 8191.75;
+		
+		mpu_data.gx = mpu_buff[8]  << 8 | mpu_buff[9];
+		mpu_data.gy = mpu_buff[10] << 8 | mpu_buff[11];
+		mpu_data.gz = mpu_buff[12] << 8 | mpu_buff[13];
+		mpu_data.gx_offset += mpu_data.gx/(131.068f*57.29578f);
+		mpu_data.gy_offset += mpu_data.gy/(131.068f*57.29578f);
+		mpu_data.gz_offset += mpu_data.az/(131.068f*57.29578f);
 
 		MPU_DELAY(5);
 	}

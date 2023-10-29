@@ -113,6 +113,7 @@ int main(void)
 	HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_3);//RF Wheel pwm
 	HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_4);//LF Wheel pwm
 	WheelsInit();//initialize the wheels pin, channel, encoder etc.
+	mpu_device_init();//initialize mpu6500
 	HAL_TIM_Base_Start_IT(&htim6);//5ms interuption period 
 	HAL_TIM_Base_Start_IT(&htim7);//5ms interuption period 
 	

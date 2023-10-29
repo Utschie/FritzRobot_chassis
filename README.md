@@ -1,4 +1,6 @@
 # FritzRobot_firmware
+### 2023-10-29
+since when using Eigen library there is unexpected assignment failure, the EKF part is deleted and will be implemented on the pc.  
 ### 2023-10-26 update
 add static filter to gyro's x and y axis and raised the threshold to 0.003. If the threshold value smaller than 0.003, there would be long-term shift on gyroscope when the chassis is static.
 ### 2023-10-25 update
