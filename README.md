@@ -1,4 +1,6 @@
 # FritzRobot_firmware
+### 2023-10-30
+fixed gyro z-axis offset 
 ### 2023-10-29
 since when using Eigen library there is unexpected assignment failure, the EKF part is deleted and will be implemented on the pc.  
 ### 2023-10-26 update

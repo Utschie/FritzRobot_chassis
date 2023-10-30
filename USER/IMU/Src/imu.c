@@ -18,6 +18,10 @@ static uint8_t        tx, rx;
 static uint8_t        tx_buff[14] = { 0xff };
 uint8_t               mpu_buff[14];                          /* buffer to save imu raw data */
 uint8_t               ist_buff[6];                           /* buffer to save IST8310 raw data */
+//uint8_t               offset_buff[6];
+//uint16_t              gx_offset;
+//uint16_t              gy_offset;
+//uint16_t              gz_offset;
 mpu_data_t            mpu_data;
 imu_t                 imu={0};
 extern int static_flag_x,static_flag_y,static_flag_z;
@@ -108,14 +112,14 @@ void mpu_get_data()//把通过spi读取数据到imu里
 	  imu.wx   = mpu_data.gx / (131.068f*57.29578f)- mpu_data.gx_offset; //量程设置为250度每秒，量程越小精度越高
     imu.wy   = mpu_data.gy / (131.068f*57.29578f)- mpu_data.gy_offset; 
     imu.wz   = mpu_data.gz / (131.068f*57.29578f)- mpu_data.gz_offset;
-	  //StaticFilter_x();//取出原始数据计算静止条件
-	  //StaticFilter_y();
+	  StaticFilter_x();//取出原始数据计算静止条件
+	  StaticFilter_y();
 	  StaticFilter_z();
 		if (static_flag_z==1)//谁静止就给谁赋0
 		{
 			imu.wz=0.0;
 		}
-		/*
+		
 		if (static_flag_x==1)
 		{
 			imu.wx=0.0;
@@ -124,7 +128,7 @@ void mpu_get_data()//把通过spi读取数据到imu里
 		{
 			imu.wy=0.0;
 		}
-		*/
+		
 		
 	  
 }
@@ -168,7 +172,7 @@ uint8_t mpu_device_init(void)
 
 	id                               = mpu_read_byte(MPU6500_WHO_AM_I);
 	uint8_t i                        = 0;
-	uint8_t MPU6500_Init_Data[10][2] = {{ MPU6500_PWR_MGMT_1, 0x80 },     /* Reset Device */ 
+	uint8_t MPU6500_Init_Data[8][2] = {{ MPU6500_PWR_MGMT_1, 0x80 },     /* Reset Device */ 
 																			{ MPU6500_PWR_MGMT_1, 0x03 },     /* Clock Source - Gyro-Z */ 
 																			{ MPU6500_PWR_MGMT_2, 0x00 },     /* Enable Acc & Gyro */ 
 																			{ MPU6500_CONFIG, 0x02 },         /* 0x04的二进制第1位为1所以LPF 92Hz */ 
@@ -176,15 +180,14 @@ uint8_t mpu_device_init(void)
 																			{ MPU6500_ACCEL_CONFIG, 0x08 },   /* +-4G */ 
 																			{ MPU6500_ACCEL_CONFIG_2, 0x02 }, /* enable LowPassFilter  92hz */ 
 																			{ MPU6500_USER_CTRL, 0x20 },};    /* Enable AUX */ 
-	for (i = 0; i < 10; i++)
+	for (i = 0; i < 8; i++)
 	{
 		mpu_write_byte(MPU6500_Init_Data[i][0], MPU6500_Init_Data[i][1]);
 		MPU_DELAY(1);
 	}
 
-	//mpu_set_gyro_fsr(0); //	这两个函数好像不太好使，所以直接在设置里设置了
-	//mpu_set_accel_fsr(1);// 这两个函数好像不太好使
-
+	//mpu_set_gyro_fsr(0); //	为什么加了这两句后会改变陀螺仪和加速度计的offset？
+	//mpu_set_accel_fsr(1);// 
 	mpu_offset_call();
 	StaticFilter_Init();
 	return 0;
@@ -202,10 +205,14 @@ void mpu_offset_call(void)
 	float ax_sum;
 	float ay_sum;
 	float az_sum;
+	//mpu_read_bytes(MPU6500_XG_OFFSET_H, offset_buff, 14);//查看设置的offset
+	//gx_offset=offset_buff[0] << 8 | offset_buff[1];
+	//gy_offset=offset_buff[2] << 8 | offset_buff[3];
+	//gz_offset=offset_buff[4] << 8 | offset_buff[5];
 	for (i=0; i<300;i++)
 	{
 		mpu_read_bytes(MPU6500_ACCEL_XOUT_H, mpu_buff, 14);//这里其实就是把静止情况下的设为offset
-
+    
 		mpu_data.ax   = mpu_buff[0] << 8 | mpu_buff[1];
     mpu_data.ay   = mpu_buff[2] << 8 | mpu_buff[3];
     mpu_data.az   = mpu_buff[4] << 8 | mpu_buff[5];
@@ -218,7 +225,7 @@ void mpu_offset_call(void)
 		mpu_data.gz = mpu_buff[12] << 8 | mpu_buff[13];
 		mpu_data.gx_offset += mpu_data.gx/(131.068f*57.29578f);
 		mpu_data.gy_offset += mpu_data.gy/(131.068f*57.29578f);
-		mpu_data.gz_offset += mpu_data.az/(131.068f*57.29578f);
+		mpu_data.gz_offset += mpu_data.gz/(131.068f*57.29578f);
 
 		MPU_DELAY(5);
 	}

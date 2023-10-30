@@ -27,84 +27,11 @@ Project File Date:  10/29/2023
 <h2>Output:</h2>
 *** Using Compiler 'V6.19', folder: 'C:\Keil_v5\ARM\ARMCLANG\Bin'
 Build target 'chassis'
-../USB_DEVICE/App/usbd_cdc_if.c(333): warning: 'vsnprintf' size argument is too large; destination buffer has size 256, but size argument is 257 [-Wfortify-source]
-        len = vsnprintf((char*)usbtemp,sizeof(usbtemp)+1,(char*)format,args);
-              ^
-../USB_DEVICE/App/usbd_cdc_if.c(349): warning: passing 'uint8_t *' (aka 'unsigned char *') to parameter of type 'const char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
-                        strncpy(ch_speed,Buf+5,strlen(Buf+5)+1);//<B4>ӵ<DA><C1><F9>λ<BF><AA>ʼ<B6><C1>ȡ<CA><FD><D7><D6>һֱ<B6><C1><B5><BD>ĩβ<A3><AC><D2><F2>Ϊ<B5><DA><CB><C4>λ<BA>͵<DA><CE><E5>λ<CA><C7>:<BA>Ϳո<F1>
-                                                      ^~~~~
-C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\string.h(335): note: passing argument to parameter here
-extern _ARMABI size_t strlen(const char * /*s*/) __attribute__((__nonnull__(1)));
-                                               ^
-../USB_DEVICE/App/usbd_cdc_if.c(349): warning: passing 'uint8_t *' (aka 'unsigned char *') to parameter of type 'const char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
-                        strncpy(ch_speed,Buf+5,strlen(Buf+5)+1);//<B4>ӵ<DA><C1><F9>λ<BF><AA>ʼ<B6><C1>ȡ<CA><FD><D7><D6>һֱ<B6><C1><B5><BD>ĩβ<A3><AC><D2><F2>Ϊ<B5><DA><CB><C4>λ<BA>͵<DA><CE><E5>λ<CA><C7>:<BA>Ϳո<F1>
-                                         ^~~~~
-C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\string.h(84): note: passing argument to parameter here
-extern _ARMABI char *strncpy(char * __restrict /*s1*/, const char * __restrict /*s2*/, size_t /*n*/) __attribute__((__nonnull__(1,2)));
-                                                                                     ^
-../USB_DEVICE/App/usbd_cdc_if.c(352): warning: illegal character encoding in string literal [-Winvalid-source-encoding]
-                        USBVcom_printf("<D7><F3><BA><F3><C2><D6><CA>յ<BD>Ŀ<B1><EA><CB>ٶ<C8>Ϊ%f\n",wheelLB.fSpeedTarget);
-                                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~ ~~~~ ~~~~~~~~~~~~ ~~~~
-../USB_DEVICE/App/usbd_cdc_if.c(355): warning: passing 'uint8_t *' (aka 'unsigned char *') to parameter of type 'const char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
-                        strncpy(ch_speed,Buf+5,strlen(Buf+5)+1);
-                                                      ^~~~~
-C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\string.h(335): note: passing argument to parameter here
-extern _ARMABI size_t strlen(const char * /*s*/) __attribute__((__nonnull__(1)));
-                                               ^
-../USB_DEVICE/App/usbd_cdc_if.c(355): warning: passing 'uint8_t *' (aka 'unsigned char *') to parameter of type 'const char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
-                        strncpy(ch_speed,Buf+5,strlen(Buf+5)+1);
-                                         ^~~~~
-C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\string.h(84): note: passing argument to parameter here
-extern _ARMABI char *strncpy(char * __restrict /*s1*/, const char * __restrict /*s2*/, size_t /*n*/) __attribute__((__nonnull__(1,2)));
-                                                                                     ^
-../USB_DEVICE/App/usbd_cdc_if.c(358): warning: illegal character encoding in string literal [-Winvalid-source-encoding]
-                        USBVcom_printf("<D3>Һ<F3><C2><D6><CA>յ<BD>Ŀ<B1><EA><CB>ٶ<C8>Ϊ%f\n",speed);
-                                        ^~~~ ~~~~~~~~~~~~~~~~ ~~~~ ~~~~~~~~~~~~ ~~~~
-../USB_DEVICE/App/usbd_cdc_if.c(361): warning: passing 'uint8_t *' (aka 'unsigned char *') to parameter of type 'const char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
-                        strncpy(ch_speed,Buf+5,strlen(Buf+5)+1);
-                                                      ^~~~~
-C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\string.h(335): note: passing argument to parameter here
-extern _ARMABI size_t strlen(const char * /*s*/) __attribute__((__nonnull__(1)));
-                                               ^
-../USB_DEVICE/App/usbd_cdc_if.c(361): warning: passing 'uint8_t *' (aka 'unsigned char *') to parameter of type 'const char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
-                        strncpy(ch_speed,Buf+5,strlen(Buf+5)+1);
-                                         ^~~~~
-C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\string.h(84): note: passing argument to parameter here
-extern _ARMABI char *strncpy(char * __restrict /*s1*/, const char * __restrict /*s2*/, size_t /*n*/) __attribute__((__nonnull__(1,2)));
-                                                                                     ^
-../USB_DEVICE/App/usbd_cdc_if.c(364): warning: illegal character encoding in string literal [-Winvalid-source-encoding]
-                        USBVcom_printf("<D7><F3>ǰ<C2><D6><CA>յ<BD>Ŀ<B1><EA><CB>ٶ<C8>Ϊ%f\n",wheelLF.fSpeedTarget);
-                                        ^~~~~~~~ ~~~~~~~~~~~~ ~~~~ ~~~~~~~~~~~~ ~~~~
-../USB_DEVICE/App/usbd_cdc_if.c(367): warning: passing 'uint8_t *' (aka 'unsigned char *') to parameter of type 'const char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
-                        strncpy(ch_speed,Buf+5,strlen(Buf+5)+1);
-                                                      ^~~~~
-C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\string.h(335): note: passing argument to parameter here
-extern _ARMABI size_t strlen(const char * /*s*/) __attribute__((__nonnull__(1)));
-                                               ^
-../USB_DEVICE/App/usbd_cdc_if.c(367): warning: passing 'uint8_t *' (aka 'unsigned char *') to parameter of type 'const char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
-                        strncpy(ch_speed,Buf+5,strlen(Buf+5)+1);
-                                         ^~~~~
-C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\string.h(84): note: passing argument to parameter here
-extern _ARMABI char *strncpy(char * __restrict /*s1*/, const char * __restrict /*s2*/, size_t /*n*/) __attribute__((__nonnull__(1,2)));
-                                                                                     ^
-../USB_DEVICE/App/usbd_cdc_if.c(370): warning: illegal character encoding in string literal [-Winvalid-source-encoding]
-                        USBVcom_printf("<D3><D2>ǰ<C2><D6><CA>յ<BD>Ŀ<B1><EA><CB>ٶ<C8>Ϊ%f\n",wheelRF.fSpeedTarget);
-                                        ^~~~~~~~ ~~~~~~~~~~~~ ~~~~ ~~~~~~~~~~~~ ~~~~
-../USB_DEVICE/App/usbd_cdc_if.c(378): warning: passing 'uint8_t *' (aka 'unsigned char *') to parameter of type 'const char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
-                strcpy(ch,Buf+3);//<CB>ٶ<C8><D7><EE><B6><E0><B8><F8><B5><BD>һλС<CA><FD><A3><AC>Ҳ<BE><CD><CA><C7><CB>ٶ<C8>ռ3<B8><F6>λx.x
-                          ^~~~~
-C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\string.h(77): note: passing argument to parameter here
-extern _ARMABI char *strcpy(char * __restrict /*s1*/, const char * __restrict /*s2*/) __attribute__((__nonnull__(1,2)));
-                                                                                    ^
-../USB_DEVICE/App/usbd_cdc_if.c(385): warning: illegal character encoding in string literal [-Winvalid-source-encoding]
-                USBVcom_printf("<B3><B5><C9><ED><CA>յ<BD>Ŀ<B1><EA><CB>ٶ<C8>Ϊ[%f, %f, %f]\n",CarSpeedTarget[0],CarSpeedTarget[1],CarSpeedTarget[2]);
-                                ^~~~~~~~~~~~~~~~~~~~ ~~~~ ~~~~~~~~~~~~ ~~~~
-15 warnings generated.
-compiling usbd_cdc_if.c...
+compiling imu.c...
 linking...
-Program Size: Code=40548 RO-data=1192 RW-data=276 ZI-data=9860  
+Program Size: Code=40916 RO-data=1188 RW-data=276 ZI-data=9860  
 FromELF: creating hex file...
-".\chassis\chassis.axf" - 0 Error(s), 15 Warning(s).
+".\chassis\chassis.axf" - 0 Error(s), 0 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -138,41 +65,41 @@ Package Vendor: Keil
       Include file:  CMSIS/Core/Include/tz_context.h
 
    * Component: ARM::CMSIS:DSP:Source:1.14.2
-      Source file:   Source/SupportFunctions/SupportFunctions.c
-      Source file:   Source/FilteringFunctions/FilteringFunctionsF16.c
-      Source file:   Source/DistanceFunctions/DistanceFunctions.c
+      Source file:   Source/SupportFunctions/SupportFunctionsF16.c
+      Source file:   Source/SVMFunctions/SVMFunctionsF16.c
+      Source file:   Source/DistanceFunctions/DistanceFunctionsF16.c
+      Source file:   Source/MatrixFunctions/MatrixFunctionsF16.c
+      Source file:   Source/StatisticsFunctions/StatisticsFunctionsF16.c
+      Source file:   Source/InterpolationFunctions/InterpolationFunctionsF16.c
+      Source file:   Source/FastMathFunctions/FastMathFunctionsF16.c
+      Source file:   Source/TransformFunctions/TransformFunctionsF16.c
+      Source file:   Source/BayesFunctions/BayesFunctionsF16.c
       Include file:  Include/arm_math_f16.h
-      Include file:  Include/arm_common_tables.h
-      Source file:   Source/CommonTables/CommonTables.c
-      Source file:   Source/ComplexMathFunctions/ComplexMathFunctions.c
-      Source file:   Source/BasicMathFunctions/BasicMathFunctions.c
-      Source file:   Source/FastMathFunctions/FastMathFunctions.c
-      Source file:   Source/FilteringFunctions/FilteringFunctions.c
+      Include file:  Include/arm_common_tables_f16.h
       Include file:  Include/arm_const_structs_f16.h
       Source file:   Source/QuaternionMathFunctions/QuaternionMathFunctions.c
-      Source file:   Source/MatrixFunctions/MatrixFunctions.c
-      Source file:   Source/StatisticsFunctions/StatisticsFunctions.c
-      Source file:   Source/SVMFunctions/SVMFunctions.c
       Include file:  Include/arm_math.h
-      Source file:   Source/BayesFunctions/BayesFunctions.c
-      Source file:   Source/TransformFunctions/TransformFunctions.c
-      Source file:   Source/InterpolationFunctions/InterpolationFunctions.c
-      Source file:   Source/BasicMathFunctions/BasicMathFunctionsF16.c
-      Source file:   Source/ComplexMathFunctions/ComplexMathFunctionsF16.c
-      Source file:   Source/CommonTables/CommonTablesF16.c
-      Include file:  Include/arm_common_tables_f16.h
+      Include file:  Include/arm_common_tables.h
       Include file:  Include/arm_const_structs.h
+      Source file:   Source/BayesFunctions/BayesFunctions.c
+      Source file:   Source/BasicMathFunctions/BasicMathFunctions.c
+      Source file:   Source/MatrixFunctions/MatrixFunctions.c
       Source file:   Source/ControllerFunctions/ControllerFunctions.c
-      Source file:   Source/FastMathFunctions/FastMathFunctionsF16.c
-      Source file:   Source/BayesFunctions/BayesFunctionsF16.c
-      Source file:   Source/TransformFunctions/TransformFunctionsF16.c
-      Source file:   Source/StatisticsFunctions/StatisticsFunctionsF16.c
-      Source file:   Source/SVMFunctions/SVMFunctionsF16.c
-      Source file:   Source/MatrixFunctions/MatrixFunctionsF16.c
-      Source file:   Source/SupportFunctions/SupportFunctionsF16.c
-      Source file:   Source/DistanceFunctions/DistanceFunctionsF16.c
-      Source file:   Source/InterpolationFunctions/InterpolationFunctionsF16.c
-Build Time Elapsed:  00:00:03
+      Source file:   Source/DistanceFunctions/DistanceFunctions.c
+      Source file:   Source/StatisticsFunctions/StatisticsFunctions.c
+      Source file:   Source/TransformFunctions/TransformFunctions.c
+      Source file:   Source/ComplexMathFunctions/ComplexMathFunctions.c
+      Source file:   Source/FastMathFunctions/FastMathFunctions.c
+      Source file:   Source/ComplexMathFunctions/ComplexMathFunctionsF16.c
+      Source file:   Source/FilteringFunctions/FilteringFunctions.c
+      Source file:   Source/FilteringFunctions/FilteringFunctionsF16.c
+      Source file:   Source/InterpolationFunctions/InterpolationFunctions.c
+      Source file:   Source/CommonTables/CommonTablesF16.c
+      Source file:   Source/SVMFunctions/SVMFunctions.c
+      Source file:   Source/SupportFunctions/SupportFunctions.c
+      Source file:   Source/BasicMathFunctions/BasicMathFunctionsF16.c
+      Source file:   Source/CommonTables/CommonTables.c
+Build Time Elapsed:  00:00:01
 </pre>
 </body>
 </html>
