@@ -375,14 +375,15 @@ void USBVcomParser(uint8_t* Buf)
 		
 		char ch[32];
 		int i=0;
-		strcpy(ch,Buf+3);//速度最多给到一位小数，也就是速度占3个位x.x
-		char *p = strtok(ch," ");
-		while (p != NULL) {
+		strcpy(ch,Buf+3);//从buf的第三位起给字符串复制
+		char *p = strtok(ch," ");//字符串分割函数，分割符为空格
+		while (p != NULL) 
+		{
     CarSpeedTarget[i++] = atof(p);     // 将子字符串转换为整数并存储到数组中
     p = strtok(NULL, " ");
     }
     Speed2Wheels(CarSpeedTarget[0],CarSpeedTarget[1],CarSpeedTarget[2]);
-		USBVcom_printf("车身收到目标速度为[%f, %f, %f]\n",CarSpeedTarget[0],CarSpeedTarget[1],CarSpeedTarget[2]);
+		//USBVcom_printf("车身收到目标速度为[%f, %f, %f]\n",CarSpeedTarget[0],CarSpeedTarget[1],CarSpeedTarget[2]);
 	}
 	/*
 	else if (Buf[0]==0x6b && Buf[1]==0x69)
